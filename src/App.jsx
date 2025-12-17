@@ -3,11 +3,11 @@ import {
   AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent, 
   Accordion, AccordionSummary, AccordionDetails, Avatar, Chip, Box,
   Tabs, Tab, IconButton, Drawer, List, ListItem, ListItemText,
-  createTheme, ThemeProvider
+  createTheme, ThemeProvider, Fab, Zoom
 } from '@mui/material';
 import { 
   Menu as MenuIcon, ExpandMore, Schedule, LocationOn, 
-  Group, Flag, ExpandMore as ExpandMoreIcon 
+  Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp
 } from '@mui/icons-material';
 
 // Theme customization
@@ -37,9 +37,16 @@ const Header = () => {
 
   return (
     <AppBar position="fixed" sx={{ bgcolor: '#00959E', zIndex: 1300 }}>
-      <Toolbar>
+      <Toolbar sx={{ px: { xs: 1, sm: 2 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <img src="/logo.png" alt="Logo" style={{ height: 60, marginRight: 16 }} />
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            style={{ 
+              height: window.innerWidth < 600 ? 40 : 60, 
+              marginRight: window.innerWidth < 600 ? 8 : 16 
+            }} 
+          />
         </Box>
         
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -49,7 +56,8 @@ const Header = () => {
               color="inherit"
               onClick={() => scrollToSection(tab.id)}
               sx={{ 
-                mx: 1,
+                mx: 0.5,
+                fontSize: { md: '0.8rem', lg: '0.875rem' },
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
               }}
             >
@@ -97,17 +105,38 @@ const Inicio = () => (
       background: 'linear-gradient(135deg, #316B8F, #45A5BF)',
       display: 'flex',
       alignItems: 'center',
-      pt: 8
+      pt: { xs: 10, sm: 8 },
+      px: { xs: 2, sm: 0 }
     }}
   >
     <Container maxWidth="lg" sx={{ textAlign: 'center', color: 'white' }}>
-      <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 300 }}>
+      <Typography 
+        variant="h2" 
+        component="h1" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 300,
+          fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' }
+        }}
+      >
         2º Encontro Pastoral
       </Typography>
-      <Typography variant="h5" sx={{ opacity: 0.9 }}>
+      <Typography 
+        variant="h5" 
+        sx={{ 
+          opacity: 0.9,
+          fontSize: { xs: '1.2rem', sm: '1.5rem' }
+        }}
+      >
         Festa de Dom Bosco Lá no Céu!
       </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.9 }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          opacity: 0.9,
+          fontSize: { xs: '1rem', sm: '1.25rem' }
+        }}
+      >
         Seja Muito Bem Vindo!
       </Typography>
     </Container>
@@ -117,10 +146,10 @@ const Inicio = () => (
 // Sobre Component
 const Sobre = () => {
   const cards = [
-    { icon: <Flag sx={{ fontSize: 48, color: '#316B8F' }} />, title: 'Objetivo Geral', content: 'Promover a integração e formação pastoral da comunidade através de atividades espirituais e educativas.' },
-    { icon: <Schedule sx={{ fontSize: 48, color: '#316B8F' }} />, title: 'Quando?', content: '15 e 16 de Dezembro de 2024, das 8h às 18h' },
-    { icon: <LocationOn sx={{ fontSize: 48, color: '#316B8F' }} />, title: 'Onde?', content: 'Centro de Convenções da Paróquia São José, Rua das Flores, 123' },
-    { icon: <Group sx={{ fontSize: 48, color: '#316B8F' }} />, title: 'Participantes', content: 'Membros da comunidade, líderes pastorais, jovens e famílias interessadas' }
+    { icon: <Flag sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Objetivo Geral', content: 'Promover a integração e formação pastoral da comunidade através de atividades espirituais e educativas.' },
+    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: '15 e 16 de Dezembro de 2024, das 8h às 18h' },
+    { icon: <LocationOn sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Onde?', content: 'Centro de Convenções da Paróquia São José, Rua das Flores, 123' },
+    { icon: <Group sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Participantes', content: 'Membros da comunidade, líderes pastorais, jovens e famílias interessadas' }
   ];
 
   return (
@@ -129,21 +158,33 @@ const Sobre = () => {
       sx={{ 
         minHeight: '100vh', 
         background: 'linear-gradient(135deg, #45A5BF, #378399)',
-        py: 8
+        py: { xs: 4, sm: 8 },
+        px: { xs: 2, sm: 0 }
       }}
     >
       <Container maxWidth="lg">
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ mb: 4, fontWeight: 300, color: 'white' }}>
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          textAlign="center" 
+          gutterBottom 
+          sx={{ 
+            mb: 4, 
+            fontWeight: 300, 
+            color: 'white',
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+          }}
+        >
           Sobre o Evento
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 2, sm: 3 }}>
           {cards.map((card, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card 
                 sx={{ 
                   height: '100%', 
                   textAlign: 'center', 
-                  p: 2,
+                  p: { xs: 1.5, sm: 2 },
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-10px)',
@@ -151,12 +192,22 @@ const Sobre = () => {
                   }
                 }}
               >
-                <CardContent>
+                <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
                   <Box sx={{ mb: 2 }}>{card.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom color="#316B8F">
+                  <Typography 
+                    variant="h6" 
+                    component="h3" 
+                    gutterBottom 
+                    color="#316B8F"
+                    sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+                  >
                     {card.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+                  >
                     {card.content}
                   </Typography>
                 </CardContent>
@@ -219,8 +270,18 @@ const Programacao = () => {
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white' }}>
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ mb: 4, fontWeight: 300 }}>
+      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          textAlign="center" 
+          gutterBottom 
+          sx={{ 
+            mb: 4, 
+            fontWeight: 300,
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+          }}
+        >
           Programação do Evento
         </Typography>
         
@@ -228,8 +289,14 @@ const Programacao = () => {
           <Tabs 
             value={activeDay} 
             onChange={(e, newValue) => setActiveDay(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
             sx={{ 
-              '& .MuiTab-root': { color: 'white' },
+              '& .MuiTab-root': { 
+                color: 'white',
+                fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                minWidth: { xs: 80, sm: 120 }
+              },
               '& .Mui-selected': { color: '#FFD700 !important' },
               '& .MuiTabs-indicator': { backgroundColor: '#FFD700' }
             }}
@@ -259,7 +326,8 @@ const Programacao = () => {
                       bgcolor: '#FFD700', 
                       color: '#000', 
                       fontWeight: 'bold',
-                      mr: 2
+                      mr: { xs: 1, sm: 2 },
+                      fontSize: { xs: '0.7rem', sm: '0.8125rem' }
                     }} 
                   />
                   <Typography sx={{ flexGrow: 1 }}>{item.evento}</Typography>
@@ -329,8 +397,8 @@ const Organizadores = () => {
             src={pessoa.foto} 
             alt={pessoa.nome}
             sx={{ 
-              width: 120, 
-              height: 120, 
+              width: { xs: 80, sm: 120 }, 
+              height: { xs: 80, sm: 120 }, 
               mx: 'auto', 
               mb: 2,
               border: '3px solid rgba(255,255,255,0.3)'
@@ -379,8 +447,18 @@ const Organizadores = () => {
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white' }}>
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ mb: 4, fontWeight: 300 }}>
+      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          textAlign="center" 
+          gutterBottom 
+          sx={{ 
+            mb: 4, 
+            fontWeight: 300,
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+          }}
+        >
           Organizadores do Evento
         </Typography>
         
@@ -492,8 +570,18 @@ const Informacoes = () => {
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white' }}>
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ mb: 4, fontWeight: 300 }}>
+      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          textAlign="center" 
+          gutterBottom 
+          sx={{ 
+            mb: 4, 
+            fontWeight: 300,
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+          }}
+        >
           Informações
         </Typography>
         <Box>
@@ -533,8 +621,18 @@ const Glossario = () => (
       py: 8
     }}
   >
-    <Container maxWidth="lg" sx={{ color: 'white' }}>
-      <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ mb: 4, fontWeight: 300 }}>
+    <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
+      <Typography 
+        variant="h3" 
+        component="h2" 
+        textAlign="center" 
+        gutterBottom 
+        sx={{ 
+          mb: 4, 
+          fontWeight: 300,
+          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+        }}
+      >
         Glossário
       </Typography>
       
@@ -625,6 +723,43 @@ const Footer = () => (
   </Box>
 );
 
+// ScrollToTop Component
+const ScrollToTop = () => {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <Zoom in={showButton}>
+      <Fab
+        color="primary"
+        size="medium"
+        onClick={scrollToTop}
+        sx={{
+          position: 'fixed',
+          bottom: { xs: 16, sm: 24 },
+          right: { xs: 16, sm: 24 },
+          bgcolor: '#00959E',
+          '&:hover': { bgcolor: '#007A82' },
+          zIndex: 1000
+        }}
+      >
+        <KeyboardArrowUp />
+      </Fab>
+    </Zoom>
+  );
+};
+
 // Main App Component
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -639,27 +774,28 @@ function App() {
     <ThemeProvider theme={theme}>
       <Box>
         <Header />
-        <Box component="main" sx={{ pt: 8 }}>
-          <Box sx={{ transform: `translateY(${scrollY * 0.1}px)` }}>
+        <Box component="main" sx={{ pt: { xs: 7, sm: 8 } }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.1}px)` } }}>
             <Inicio />
           </Box>
-          <Box sx={{ transform: `translateY(${scrollY * 0.05}px)` }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.05}px)` } }}>
             <Sobre />
           </Box>
-          <Box sx={{ transform: `translateY(${scrollY * 0.03}px)` }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.03}px)` } }}>
             <Programacao />
           </Box>
-          <Box sx={{ transform: `translateY(${scrollY * 0.02}px)` }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.02}px)` } }}>
             <Organizadores />
           </Box>
-          <Box sx={{ transform: `translateY(${scrollY * 0.01}px)` }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.01}px)` } }}>
             <Informacoes />
           </Box>
-          <Box sx={{ transform: `translateY(${scrollY * 0.005}px)` }}>
+          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.005}px)` } }}>
             <Glossario />
           </Box>
         </Box>
         <Footer />
+        <ScrollToTop />
       </Box>
     </ThemeProvider>
   );
