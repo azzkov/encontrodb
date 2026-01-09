@@ -137,8 +137,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
           style={{
             maxWidth: '40%',
             height: 'auto',
-            borderRadius: '12px',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            borderRadius: '12px'
           }}
         />
       </Box>
