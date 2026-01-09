@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { 
   Menu as MenuIcon, ExpandMore, Schedule, LocationOn, 
-  Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp
+  Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp, PhotoLibrary
 } from '@mui/icons-material';
 import InscricaoPage from './InscricaoPage';
 import AdminPage from './AdminPage';
@@ -870,6 +870,38 @@ const ScrollToTop = () => {
   );
 };
 
+// Mural de Fotos Component
+const MuralFotos = () => {
+  const openPadlet = () => {
+    window.open('https://padlet.com/cesamgo/2-encontro-pastoral-cesam-goi-nia-fklpfb37xjtpe6g8', '_blank');
+  };
+
+  return (
+    <Fab
+      variant="extended"
+      onClick={openPadlet}
+      sx={{
+        position: 'fixed',
+        bottom: { xs: 80, sm: 90 },
+        right: { xs: 16, sm: 24 },
+        bgcolor: '#FFD700',
+        color: '#000',
+        fontWeight: 'bold',
+        '&:hover': { 
+          bgcolor: '#E6C200',
+          transform: 'scale(1.05)'
+        },
+        zIndex: 1000,
+        fontSize: { xs: '0.8rem', sm: '0.9rem' },
+        px: { xs: 2, sm: 3 }
+      }}
+    >
+      <PhotoLibrary sx={{ mr: 1 }} />
+      Mural de Fotos
+    </Fab>
+  );
+};
+
 // Main App Component
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -953,6 +985,7 @@ function App() {
         </Box>
         <Footer />
         <ScrollToTop />
+        <MuralFotos />
         
         {showInscricao && (
           <InscricaoPage onClose={() => setShowInscricao(false)} />
