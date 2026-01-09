@@ -630,7 +630,7 @@ const Organizadores = () => {
           </Typography>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} sm={6} md={4}>
-              <PersonCard pessoa={{ nome: 'Pr. Wagner Gama', foto: '/fotos/wagner.png', funcoes: ['Diretor Geral da Obra'] }} index={0} sectionKey="diretor-geral" />
+              <PersonCard pessoa={{ nome: 'Pe. Wagner Gama', foto: '/fotos/wagner.png', funcoes: ['Diretor Geral da Obra'] }} index={0} sectionKey="diretor-geral" />
             </Grid>
           </Grid>
         </Box>
