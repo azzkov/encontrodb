@@ -233,7 +233,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
 const Sobre = () => {
   const cards = [
     { icon: <Flag sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Objetivo Geral', content: 'Promover a integração e formação pastoral da comunidade através de atividades espirituais e educativas.' },
-    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: '06, 07 e 08 de Fevereiro de 2025' },
+    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: '06, 07 e 08 de Fevereiro de 2026' },
     { icon: <LocationOn sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Onde?', content: 'CESAM Goiânia - Alameda dos Buritis, 485, Setor Oeste - Goiânia/GO', hasMap: true },
     { icon: <Group sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Participantes', content: 'Jovens aprendizes e educadores do CESAM Goiânia' }
   ];
