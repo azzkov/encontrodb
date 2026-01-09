@@ -874,9 +874,22 @@ const Footer = () => (
           <Typography sx={{ opacity: 0.9 }}>@cesamgo</Typography>
         </Box>
       </Box>
-      <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+      <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography sx={{ opacity: 0.8 }}>
           &copy; 2026 CESAM Goiânia. Todos os direitos reservados.
+        </Typography>
+        <Typography 
+          component="a" 
+          href="/admin" 
+          sx={{ 
+            opacity: 0.3, 
+            fontSize: '0.7rem', 
+            color: 'inherit', 
+            textDecoration: 'none',
+            '&:hover': { opacity: 0.6 }
+          }}
+        >
+          .
         </Typography>
       </Box>
     </Container>
@@ -935,9 +948,19 @@ function App() {
 
   // Verificar se é página de admin pela URL
   useEffect(() => {
-    if (window.location.pathname === '/admin') {
-      setShowAdmin(true);
-    }
+    const checkAdminAccess = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      if (path === '/admin' || hash === '#admin' || path.includes('admin')) {
+        setShowAdmin(true);
+      }
+    };
+    
+    checkAdminAccess();
+    
+    // Escutar mudanças na URL
+    window.addEventListener('popstate', checkAdminAccess);
+    return () => window.removeEventListener('popstate', checkAdminAccess);
   }, []);
 
   // Verificar limite de inscrições
