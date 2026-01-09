@@ -122,7 +122,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
     id="inicio" 
     sx={{ 
       minHeight: '100vh', 
-      background: '#123651',
+      background: '#00698b',
       display: 'flex',
       alignItems: 'center',
       pt: { xs: 10, sm: 8 },
@@ -135,7 +135,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
           src="/fotos/banner.png" 
           alt="Banner do Evento" 
           style={{
-            maxWidth: '20%',
+            maxWidth: '40%',
             height: 'auto',
             borderRadius: '12px',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
