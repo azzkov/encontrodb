@@ -126,10 +126,11 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
       display: 'flex',
       alignItems: 'center',
       pt: { xs: 10, sm: 8 },
+      pb: { xs: 4, sm: 6 },
       px: { xs: 2, sm: 0 }
     }}
   >
-    <Container maxWidth="lg" sx={{ textAlign: 'center', color: 'white' }}>
+    <Container maxWidth="lg" sx={{ textAlign: 'center', color: 'white', py: { xs: 2, sm: 4 } }}>
          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
         <img 
           src="/fotos/banner.png" 
@@ -190,40 +191,42 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
       )}
       
       <Grow in={true} timeout={1200}>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={onOpenInscricao}
-          disabled={inscricoesEncerradas}
-          sx={{
-            bgcolor: inscricoesEncerradas ? '#666' : '#FFD700',
-            color: inscricoesEncerradas ? '#ccc' : '#000',
-            fontWeight: 'bold',
-            fontSize: { xs: '1.1rem', sm: '1.3rem' },
-            px: { xs: 4, sm: 5 },
-            py: { xs: 2, sm: 2.5 },
-            borderRadius: 4,
-            boxShadow: inscricoesEncerradas ? 'none' : '0 8px 32px rgba(255, 215, 0, 0.4)',
-            animation: inscricoesEncerradas ? 'none' : 'pulse 2s infinite',
-            cursor: inscricoesEncerradas ? 'not-allowed' : 'pointer',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            '&:hover': inscricoesEncerradas ? {} : { 
-              bgcolor: '#E6C200',
-              transform: 'scale(1.05) translateY(-2px)',
-              boxShadow: '0 16px 48px rgba(255, 215, 0, 0.5)'
-            },
-            '&:active': inscricoesEncerradas ? {} : {
-              transform: 'scale(0.98)'
-            },
-            '@keyframes pulse': {
-              '0%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.4)' },
-              '50%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.7)' },
-              '100%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.4)' }
-            }
-          }}
-        >
-          {inscricoesEncerradas ? 'INSCRIÇÕES ENCERRADAS' : 'INSCREVER-SE AGORA'}
-        </Button>
+        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={onOpenInscricao}
+            disabled={inscricoesEncerradas}
+            sx={{
+              bgcolor: inscricoesEncerradas ? '#666' : '#FFD700',
+              color: inscricoesEncerradas ? '#ccc' : '#000',
+              fontWeight: 'bold',
+              fontSize: { xs: '1.1rem', sm: '1.3rem' },
+              px: { xs: 4, sm: 5 },
+              py: { xs: 2, sm: 2.5 },
+              borderRadius: 4,
+              boxShadow: inscricoesEncerradas ? 'none' : '0 8px 32px rgba(255, 215, 0, 0.4)',
+              animation: inscricoesEncerradas ? 'none' : 'pulse 2s infinite',
+              cursor: inscricoesEncerradas ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': inscricoesEncerradas ? {} : { 
+                bgcolor: '#E6C200',
+                transform: 'scale(1.05) translateY(-2px)',
+                boxShadow: '0 16px 48px rgba(255, 215, 0, 0.5)'
+              },
+              '&:active': inscricoesEncerradas ? {} : {
+                transform: 'scale(0.98)'
+              },
+              '@keyframes pulse': {
+                '0%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.4)' },
+                '50%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.7)' },
+                '100%': { boxShadow: '0 8px 32px rgba(255, 215, 0, 0.4)' }
+              }
+            }}
+          >
+            {inscricoesEncerradas ? 'INSCRIÇÕES ENCERRADAS' : 'INSCREVER-SE AGORA'}
+          </Button>
+        </Box>
       </Grow>
     </Container>
   </Box>
