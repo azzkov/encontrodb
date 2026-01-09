@@ -493,7 +493,7 @@ const Organizadores = () => {
       { nome: 'Rosângela Rodrigues', foto: '/fotos/rosangela.jfif', funcoes: ['Diretora Executiva - CESAM Goiânia'] }
     ],
     pastorais: [
-      { nome: 'Robert Trajano', foto: '/fotos/robert.jfif', funcoes: ['Coordenador Pastoral da Presença', 'Formação: Administração de Empresas'] },
+      { nome: 'Robert Trajano', foto: '/fotos/robert.jpg', funcoes: ['Coordenador Pastoral da Presença', 'Formação: Administração de Empresas'] },
       { nome: 'Walison da Silva', foto: '/fotos/wallison.jfif', funcoes: ['Animador Pastoral CESAM Goiânia', 'Formação: Teologia e Letras'] }
     ],
     secretarias: [
