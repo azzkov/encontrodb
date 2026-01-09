@@ -47,8 +47,7 @@ const Header = () => {
     { id: 'sobre', label: 'Sobre' },
     { id: 'programacao', label: 'Programação' },
     { id: 'organizadores', label: 'Organizadores' },
-    { id: 'informacoes', label: 'Informações' },
-    { id: 'glossario', label: 'Glossário' }
+    { id: 'informacoes', label: 'Informações' }
   ];
 
   const scrollToSection = (sectionId) => {
@@ -123,7 +122,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
     id="inicio" 
     sx={{ 
       minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #316B8F, #45A5BF)',
+      background: '#123651',
       display: 'flex',
       alignItems: 'center',
       pt: { xs: 10, sm: 8 },
@@ -131,6 +130,18 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
     }}
   >
     <Container maxWidth="lg" sx={{ textAlign: 'center', color: 'white' }}>
+         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+        <img 
+          src="/fotos/banner.png" 
+          alt="Banner do Evento" 
+          style={{
+            maxWidth: '20%',
+            height: 'auto',
+            borderRadius: '12px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+          }}
+        />
+      </Box>
       <Typography 
         variant="h2" 
         component="h1" 
@@ -162,6 +173,8 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
       >
         Seja Muito Bem Vindo!
       </Typography>
+      
+ 
       
       {inscricoesEncerradas && (
         <Typography 
@@ -771,84 +784,6 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
   );
 };
 
-// Glossário Component
-const Glossario = () => (
-  <Box 
-    id="glossario" 
-    sx={{ 
-      minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #033D49, #00959E)',
-      py: 8
-    }}
-  >
-    <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
-      <Typography 
-        variant="h3" 
-        component="h2" 
-        textAlign="center" 
-        gutterBottom 
-        sx={{ 
-          mb: 4, 
-          fontWeight: 300,
-          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
-        }}
-      >
-        Glossário
-      </Typography>
-      
-      <Box>
-        <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 4, color: '#FFD700' }}>
-          Termos Pastorais
-        </Typography>
-        
-        <Box sx={{ '& > *': { mb: 3 } }}>
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Pastoral</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Atividade da Igreja voltada para o cuidado espiritual e material dos fiéis, seguindo o exemplo de Jesus Cristo como Bom Pastor.
-            </Typography>
-          </Box>
-          
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Catequese</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Processo de educação na fé cristã, que visa formar e instruir os fiéis nos ensinamentos da Igreja Católica.
-            </Typography>
-          </Box>
-          
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Liturgia</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Conjunto de cerimônias e ritos oficiais da Igreja, especialmente a celebração da Eucaristia e dos sacramentos.
-            </Typography>
-          </Box>
-          
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Pastoral Social</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Dimensão da ação pastoral voltada para a promoção da justiça social e o cuidado com os mais necessitados.
-            </Typography>
-          </Box>
-          
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Pastoral Familiar</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Ação evangelizadora direcionada às famílias, promovendo valores cristãos no ambiente doméstico.
-            </Typography>
-          </Box>
-          
-          <Box>
-            <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB' }}>Pastoral da Juventude</Typography>
-            <Typography sx={{ color: 'rgba(255,255,255,0.9)', lineHeight: 1.8 }}>
-              Ministério específico voltado para o acompanhamento e formação dos jovens na fé cristã.
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </Container>
-  </Box>
-);
-
 // Footer Component
 const Footer = () => (
   <Box component="footer" sx={{ bgcolor: '#00959E', color: 'white', py: 4 }}>
@@ -1012,9 +947,6 @@ function App() {
           </Box>
           <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.01}px)` } }}>
             <Informacoes onOpenInscricao={handleOpenInscricao} inscricoesEncerradas={inscricoesEncerradas} />
-          </Box>
-          <Box sx={{ transform: { xs: 'none', md: `translateY(${scrollY * 0.005}px)` } }}>
-            <Glossario />
           </Box>
         </Box>
         <Footer />
