@@ -508,9 +508,11 @@ const Organizadores = () => {
       { nome: 'Isamara Santana', foto: '/fotos/isamara.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Jonatas Peres', foto: '/fotos/jonatas.jfif', funcoes: ['Instrutor', 'Formação: Arquiteto'] },
       { nome: 'Joyce Azeredo', foto: '/fotos/joyce.jfif', funcoes: ['Auxiliar Administrativo', 'Formação: Pedagogia e Enfermagem'] },
+      { nome: 'Karlla Khristine Rodrigues', foto: '/fotos/karlla.jfif', funcoes: ['Analista Socioedutaiva', 'Formação: Economista'] },
       { nome: 'Mônica Godoi', foto: '/fotos/monica.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Nelimar Herculano', foto: '/fotos/nelimar.jfif', funcoes: ['Analista Departamento Pessoal', 'Formação: Pedagogia e Gestão de RH'] },
       { nome: 'Rodrigo Neres', foto: '/fotos/rodrigo.jfif', funcoes: ['Auxiliar de Manutenção Predial'] },
+      { nome: 'Tânia Regina', foto: '/fotos/tania.jfif', funcoes: ['Analista Socioeducativa', 'Formação: Direito'] },
       { nome: 'Thais Lamarão', foto: '/fotos/thais.jfif', funcoes: ['Captadora', 'Formação: Letras'] },
     ]
   };
