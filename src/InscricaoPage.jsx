@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
 
 const InscricaoPage = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const InscricaoPage = ({ onClose }) => {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [showForm, setShowForm] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const calculateAge = (birthDate) => {
@@ -66,7 +68,8 @@ const InscricaoPage = ({ onClose }) => {
         status: 'inscrito'
       });
 
-      if (formData.idade <= 18) {
+      if (formData.idade < 18) {
+        setShowForm(false);
         setShowAuthDialog(true);
       } else {
         setMessage('Inscrição realizada com sucesso!');
@@ -79,15 +82,19 @@ const InscricaoPage = ({ onClose }) => {
   };
 
   const downloadAuthorization = () => {
-    // Link para download da autorização
-    const link = document.createElement('a');
-    link.href = 'https://exemplo.com/autorizacao.pdf'; // Substitua pelo link real
-    link.download = 'autorizacao-menor-idade.pdf';
-    link.click();
+    // Abrir o documento HTML em nova janela para impressão/download
+    const newWindow = window.open('/autorizacao-menor-idade.html', '_blank');
+    if (newWindow) {
+      newWindow.onload = () => {
+        setTimeout(() => {
+          newWindow.print();
+        }, 500);
+      };
+    }
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
       <Box sx={{ 
         position: 'fixed', 
         top: 0, 
@@ -100,86 +107,117 @@ const InscricaoPage = ({ onClose }) => {
         justifyContent: 'center',
         zIndex: 2000
       }}>
-        <Container maxWidth="sm">
-          <Paper sx={{ p: 4, position: 'relative' }}>
-            <Button 
-              onClick={onClose}
-              sx={{ position: 'absolute', top: 8, right: 8 }}
-            >
-              ✕
-            </Button>
-            
-            <Typography variant="h4" textAlign="center" gutterBottom color="#00959E">
-              2º Encontro Pastoral
-            </Typography>
-            <Typography variant="h6" textAlign="center" gutterBottom>
-              Festa de Dom Bosco Lá no Céu!
-            </Typography>
-            <Typography textAlign="center" sx={{ mb: 3 }}>
-              06, 07 e 08 de Fevereiro de 2025
-            </Typography>
-
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="Nome Completo *"
-                value={formData.nome}
-                onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
-                sx={{ mb: 2 }}
-              />
-
-              <DatePicker
-                label="Data de Nascimento *"
-                value={formData.dataNascimento}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
-                maxDate={dayjs()}
-              />
-
-              <TextField
-                fullWidth
-                label="Idade"
-                value={formData.idade}
-                disabled
-                sx={{ mb: 3 }}
-              />
-
-              {message && (
-                <Alert severity={message.includes('sucesso') ? 'success' : 'error'} sx={{ mb: 2 }}>
-                  {message}
-                </Alert>
-              )}
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={loading}
-                sx={{ 
-                  bgcolor: '#00959E', 
-                  '&:hover': { bgcolor: '#007A82' },
-                  py: 1.5
-                }}
+        {showForm && (
+          <Container maxWidth="sm">
+            <Paper sx={{ p: 4, position: 'relative' }}>
+              <Button 
+                onClick={onClose}
+                sx={{ position: 'absolute', top: 8, right: 8 }}
               >
-                {loading ? <CircularProgress size={24} /> : 'Inscrever-se'}
+                ✕
               </Button>
-            </form>
-          </Paper>
-        </Container>
+              
+              <Typography variant="h4" textAlign="center" gutterBottom color="#00959E">
+                2º Encontro Pastoral
+              </Typography>
+              <Typography variant="h6" textAlign="center" gutterBottom>
+                Festa de Dom Bosco Lá no Céu!
+              </Typography>
+              <Typography textAlign="center" sx={{ mb: 3 }}>
+                06, 07 e 08 de Fevereiro de 2026
+              </Typography>
 
-        <Dialog open={showAuthDialog} onClose={() => setShowAuthDialog(false)}>
-          <DialogTitle>Autorização Necessária</DialogTitle>
-          <DialogContent>
-            <Typography>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  label="Nome Completo *"
+                  value={formData.nome}
+                  onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
+                  sx={{ mb: 2 }}
+                />
+
+                <DatePicker
+                  label="Data de Nascimento *"
+                  value={formData.dataNascimento}
+                  onChange={handleDateChange}
+                  format="DD/MM/YYYY"
+                  renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
+                  maxDate={dayjs()}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Idade"
+                  value={formData.idade}
+                  disabled
+                  sx={{ mb: 3 }}
+                />
+
+                {message && (
+                  <Alert severity={message.includes('sucesso') ? 'success' : 'error'} sx={{ mb: 2 }}>
+                    {message}
+                  </Alert>
+                )}
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  disabled={loading}
+                  sx={{ 
+                    bgcolor: '#00959E', 
+                    '&:hover': { bgcolor: '#007A82' },
+                    py: 1.5
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'Inscrever-se'}
+                </Button>
+              </form>
+            </Paper>
+          </Container>
+        )}
+
+        <Dialog 
+          open={showAuthDialog} 
+          onClose={() => setShowAuthDialog(false)}
+          maxWidth="sm"
+          fullWidth
+          sx={{ zIndex: 3000 }}
+        >
+          <DialogTitle sx={{ textAlign: 'center', color: '#00959E', fontSize: '1.5rem' }}>
+            Inscrição Realizada com Sucesso!
+          </DialogTitle>
+          <DialogContent sx={{ textAlign: 'center', py: 3 }}>
+            <Typography variant="h6" gutterBottom sx={{ color: '#FFD700', mb: 2 }}>
+              Autorização Necessária
+            </Typography>
+            <Typography sx={{ mb: 3, lineHeight: 1.6 }}>
               Como você é menor de idade, será necessário comparecer ao evento com a autorização 
-              dos pais/responsáveis em mãos para ter sua entrada liberada.
+              dos pais/responsáveis devidamente preenchida e assinada para ter sua entrada liberada.
+            </Typography>
+            <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+              Clique no botão abaixo para fazer o download do documento de autorização.
             </Typography>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={downloadAuthorization} variant="contained">
-              Baixar Autorização
+          <DialogActions sx={{ justifyContent: 'center', pb: 3, gap: 2 }}>
+            <Button 
+              onClick={downloadAuthorization} 
+              variant="contained"
+              sx={{ 
+                bgcolor: '#FFD700', 
+                color: '#000',
+                fontWeight: 'bold',
+                px: 4,
+                '&:hover': { bgcolor: '#E6C200' }
+              }}
+            >
+              Imprimir Autorização
             </Button>
-            <Button onClick={() => { setShowAuthDialog(false); onClose(); }}>
+            <Button 
+              onClick={() => { setShowAuthDialog(false); onClose(); }}
+              variant="outlined"
+              sx={{ px: 4 }}
+            >
               Fechar
             </Button>
           </DialogActions>

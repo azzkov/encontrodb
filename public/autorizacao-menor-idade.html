@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorização para Menor de Idade</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #00959E;
+            padding-bottom: 10px;
+        }
+        .logo {
+            width: 130px;
+            height: auto;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            .logo {
+                width: 180px;
+            }
+        }
+        .title {
+            color: #00959E;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .subtitle {
+            color: #123651;
+            font-size: 13px;
+            margin: 3px 0;
+        }
+        .event-info {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-left: 3px solid #FFD700;
+            margin: 10px 0;
+            font-size: 10px;
+        }
+        .form-section {
+            margin: 12px 0;
+        }
+        .form-row {
+            display: flex;
+            margin: 8px 0;
+            align-items: center;
+        }
+        .form-label {
+            font-weight: bold;
+            margin-right: 5px;
+            min-width: 80px;
+            font-size: 10px;
+        }
+        .form-line {
+            border-bottom: 1px solid #333;
+            flex: 1;
+            height: 15px;
+            margin: 0 3px;
+        }
+        .signature-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-box {
+            text-align: center;
+            width: 45%;
+        }
+        .signature-line {
+            border-bottom: 1px solid #333;
+            height: 25px;
+            margin-bottom: 3px;
+        }
+        .footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+        }
+        .contact-info {
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+            font-size: 10px;
+        }
+        ul {
+            margin: 8px 0;
+            padding-left: 15px;
+        }
+        li {
+            margin: 2px 0;
+            font-size: 10px;
+        }
+        .obs-box {
+            border: 1px solid #ccc;
+            min-height: 30px;
+            padding: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="logoau.png" alt="Logo CESAM" class="logo">
+        <div class="title">AUTORIZAÇÃO PARA MENOR DE IDADE</div>
+        <div class="subtitle">2º Encontro Pastoral - Festa de Dom Bosco Lá no Céu!</div>
+    </div>
+
+    <div class="event-info">
+        <strong>Data:</strong> 06, 07 e 08 de Fevereiro de 2026 | <strong>Local:</strong> CESAM Goiânia - Alameda dos Buritis, 485, Setor Oeste - Goiânia/GO | <strong>Tel:</strong> (62) 3920-9800
+    </div>
+
+    <div class="form-section">
+        <p style="margin: 8px 0; font-size: 11px;">Eu,____________________________________________________ <span class="form-line"></span>, RG________________ <span class="form-line"></span> CPF__________________________________ <span class="form-line"></span>, responsável pelo menor:</p>
+
+        <div class="form-row">
+            <span class="form-label">Nome:</span>
+            <span class="form-line"></span>
+            <span class="form-label">Idade:</span>
+            <span class="form-line" style="max-width: 50px;"></span>
+        </div>
+
+        <div class="form-row">
+            <span class="form-label">Nascimento:</span>
+            <span class="form-line"></span>
+            <span class="form-label">RG:</span>
+            <span class="form-line"></span>
+        </div>
+
+        <p style="margin: 10px 0; font-size: 11px;"><strong>AUTORIZO</strong> a participação no <strong>2º Encontro Pastoral</strong>, ciente de que:</p>
+        
+        <ul>
+            <li>Inclui atividades religiosas, educativas e de convivência</li>
+            <li>Hospedagem em salas adaptadas, todas as refeições incluídas</li>
+            <li>Deve seguir normas de conduta da organização</li>
+            <li>Autorizo providências médicas em emergências</li>
+        </ul>
+
+        <div class="contact-info">
+            <strong>Contato Emergência:</strong> Nome: <span class="form-line"></span> Tel: <span class="form-line"></span> Parentesco: <span class="form-line"></span>
+        </div>
+
+        <p style="margin: 8px 0; font-size: 10px;"><strong>Observações Médicas/Alimentares:</strong></p>
+        <div class="obs-box"></div>
+    </div>
+
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <p style="font-size: 10px; margin: 2px 0;"><strong>Assinatura do Responsável</strong></p>
+            <p style="font-size: 9px; margin: 2px 0;">Data: ___/___/2026</p>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <p style="font-size: 10px; margin: 2px 0;"><strong>Assinatura do Menor</strong><br>(se maior de 16 anos)</p>
+            <p style="font-size: 9px; margin: 2px 0;">Data: ___/___/2026</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>CESAM Goiânia</strong> - Alameda dos Buritis, 485 - Setor Oeste - Goiânia/GO - (62) 3920-9800 - @cesamgo</p>
+    </div>
+</body>
+</html>
