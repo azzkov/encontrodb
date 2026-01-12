@@ -12,6 +12,7 @@ import { collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from 'firebase
 import { auth, db } from './firebase';
 import { getSystemConfig, updateSystemConfig } from './configService';
 import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
 
 const AdminPage = () => {
   const [user, setUser] = useState(null);
@@ -352,7 +353,7 @@ const AdminPage = () => {
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Adicionar Participante</DialogTitle>
         <DialogContent>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
             <TextField
               fullWidth
               label="Nome Completo *"
@@ -373,6 +374,7 @@ const AdminPage = () => {
               label="Data de Nascimento *"
               value={newParticipant.dataNascimento}
               onChange={handleDateChange}
+              format="DD/MM/YYYY"
               renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
               maxDate={dayjs()}
             />
@@ -412,7 +414,7 @@ const AdminPage = () => {
       <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Editar Participante</DialogTitle>
         <DialogContent>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
             <TextField
               fullWidth
               label="Nome Completo *"
@@ -433,6 +435,7 @@ const AdminPage = () => {
               label="Data de Nascimento *"
               value={editingParticipant?.dataNascimento}
               onChange={(date) => setEditingParticipant(prev => ({ ...prev, dataNascimento: date, idade: calculateAge(date) }))}
+              format="DD/MM/YYYY"
               renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
               maxDate={dayjs()}
             />
