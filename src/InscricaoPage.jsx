@@ -14,6 +14,7 @@ import 'dayjs/locale/pt-br';
 const InscricaoPage = ({ onClose }) => {
   const [formData, setFormData] = useState({
     nome: '',
+    telefone: '',
     dataNascimento: null,
     idade: ''
   });
@@ -21,6 +22,19 @@ const InscricaoPage = ({ onClose }) => {
   const [message, setMessage] = useState('');
   const [showForm, setShowForm] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+
+  const formatPhone = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 2) return `(${numbers}`;
+    if (numbers.length <= 6) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    if (numbers.length <= 10) return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (e) => {
+    const formatted = formatPhone(e.target.value);
+    setFormData(prev => ({ ...prev, telefone: formatted }));
+  };
 
   const calculateAge = (birthDate) => {
     if (!birthDate) return '';
@@ -39,7 +53,7 @@ const InscricaoPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.dataNascimento) {
+    if (!formData.nome || !formData.telefone || !formData.dataNascimento) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -62,6 +76,7 @@ const InscricaoPage = ({ onClose }) => {
 
       await addDoc(collection(db, 'participantes'), {
         nome: formData.nome,
+        telefone: formData.telefone,
         dataNascimento: formData.dataNascimento.toDate(),
         idade: formData.idade,
         dataInscricao: new Date(),
@@ -133,6 +148,16 @@ const InscricaoPage = ({ onClose }) => {
                   label="Nome Completo *"
                   value={formData.nome}
                   onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
+                  sx={{ mb: 2 }}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Telefone *"
+                  value={formData.telefone}
+                  onChange={handlePhoneChange}
+                  placeholder="(62) 99999-9999"
+                  inputProps={{ maxLength: 15 }}
                   sx={{ mb: 2 }}
                 />
 

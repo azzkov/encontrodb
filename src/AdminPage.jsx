@@ -22,8 +22,11 @@ const AdminPage = () => {
   const [message, setMessage] = useState('');
   const [showLimitDialog, setShowLimitDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editingParticipant, setEditingParticipant] = useState(null);
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
+    telefone: '',
     dataNascimento: null,
     idade: ''
   });
@@ -54,11 +57,21 @@ const AdminPage = () => {
     setParticipantes([]);
   };
 
-  const calculateAge = (birthDate) => {
-    if (!birthDate) return '';
-    const today = dayjs();
-    const birth = dayjs(birthDate);
-    return Math.floor(today.diff(birth, 'year', true));
+  const formatPhone = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 2) return `(${numbers}`;
+    if (numbers.length <= 6) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    if (numbers.length <= 10) return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (e, isEdit = false) => {
+    const formatted = formatPhone(e.target.value);
+    if (isEdit) {
+      setEditingParticipant(prev => ({ ...prev, telefone: formatted }));
+    } else {
+      setNewParticipant(prev => ({ ...prev, telefone: formatted }));
+    }
   };
 
   const handleDateChange = (date) => {
@@ -67,6 +80,44 @@ const AdminPage = () => {
       dataNascimento: date,
       idade: calculateAge(date)
     }));
+  };
+
+  const calculateAge = (birthDate) => {
+    if (!birthDate) return '';
+    const today = dayjs();
+    const birth = dayjs(birthDate);
+    return Math.floor(today.diff(birth, 'year', true));
+  };
+
+  const editParticipant = (participant) => {
+    setEditingParticipant({
+      ...participant,
+      dataNascimento: participant.dataNascimento ? dayjs(participant.dataNascimento) : null
+    });
+    setShowEditDialog(true);
+  };
+
+  const updateParticipant = async () => {
+    if (!editingParticipant.nome || !editingParticipant.dataNascimento) {
+      setMessage('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, 'participantes', editingParticipant.id), {
+        nome: editingParticipant.nome,
+        telefone: editingParticipant.telefone || '',
+        dataNascimento: editingParticipant.dataNascimento.toDate(),
+        idade: editingParticipant.idade
+      });
+      
+      setShowEditDialog(false);
+      setEditingParticipant(null);
+      loadParticipantes();
+      setMessage('Participante atualizado com sucesso.');
+    } catch (error) {
+      setMessage('Erro ao atualizar participante.');
+    }
   };
 
   const addParticipant = async () => {
@@ -83,13 +134,14 @@ const AdminPage = () => {
     try {
       await addDoc(collection(db, 'participantes'), {
         nome: newParticipant.nome,
+        telefone: newParticipant.telefone || '',
         dataNascimento: newParticipant.dataNascimento.toDate(),
         idade: newParticipant.idade,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
       
-      setNewParticipant({ nome: '', dataNascimento: null, idade: '' });
+      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '' });
       setShowAddDialog(false);
       loadParticipantes();
       setMessage('Participante adicionado com sucesso.');
@@ -123,23 +175,24 @@ const AdminPage = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Nome', 'Data Nascimento', 'Idade', 'Data Inscrição', 'Status'];
+    const headers = ['Nome', 'Telefone', 'Data_Nascimento', 'Idade', 'Data_Inscricao', 'Status'];
     const csvContent = [
       headers.join(','),
       ...participantes.map(p => [
-        p.nome,
-        p.dataNascimento?.toLocaleDateString('pt-BR'),
-        p.idade,
-        p.dataInscricao?.toLocaleDateString('pt-BR'),
-        p.status
+        `"${p.nome}"`,
+        `"${p.telefone || 'N/A'}"`,
+        `"${p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A'}"`,
+        p.idade || 'N/A',
+        `"${p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A'}"`,
+        p.status || 'inscrito'
       ].join(','))
     ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'participantes.csv';
+    a.download = `participantes_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
   };
 
@@ -244,6 +297,7 @@ const AdminPage = () => {
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
+              <TableCell>Telefone</TableCell>
               <TableCell>Data Nasc.</TableCell>
               <TableCell>Idade</TableCell>
               <TableCell>Data Inscrição</TableCell>
@@ -255,6 +309,7 @@ const AdminPage = () => {
             {participantes.map((participante) => (
               <TableRow key={participante.id}>
                 <TableCell>{participante.nome}</TableCell>
+                <TableCell>{participante.telefone || 'N/A'}</TableCell>
                 <TableCell>
                   {participante.dataNascimento?.toLocaleDateString('pt-BR')}
                 </TableCell>
@@ -272,6 +327,14 @@ const AdminPage = () => {
                   <Chip label={participante.status} color="success" size="small" />
                 </TableCell>
                 <TableCell>
+                  <Button 
+                    size="small" 
+                    color="primary"
+                    onClick={() => editParticipant(participante)}
+                    sx={{ mr: 1 }}
+                  >
+                    Editar
+                  </Button>
                   <Button 
                     size="small" 
                     color="error"
@@ -296,6 +359,15 @@ const AdminPage = () => {
               value={newParticipant.nome}
               onChange={(e) => setNewParticipant(prev => ({ ...prev, nome: e.target.value }))}
               sx={{ mt: 2, mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Telefone"
+              value={newParticipant.telefone}
+              onChange={(e) => handlePhoneChange(e, false)}
+              placeholder="(62) 99999-9999"
+              inputProps={{ maxLength: 15 }}
+              sx={{ mb: 2 }}
             />
             <DatePicker
               label="Data de Nascimento *"
@@ -334,6 +406,48 @@ const AdminPage = () => {
         <DialogActions>
           <Button onClick={() => setShowLimitDialog(false)}>Cancelar</Button>
           <Button onClick={updateLimit} variant="contained">Salvar</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Editar Participante</DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TextField
+              fullWidth
+              label="Nome Completo *"
+              value={editingParticipant?.nome || ''}
+              onChange={(e) => setEditingParticipant(prev => ({ ...prev, nome: e.target.value }))}
+              sx={{ mt: 2, mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Telefone"
+              value={editingParticipant?.telefone || ''}
+              onChange={(e) => handlePhoneChange(e, true)}
+              placeholder="(62) 99999-9999"
+              inputProps={{ maxLength: 15 }}
+              sx={{ mb: 2 }}
+            />
+            <DatePicker
+              label="Data de Nascimento *"
+              value={editingParticipant?.dataNascimento}
+              onChange={(date) => setEditingParticipant(prev => ({ ...prev, dataNascimento: date, idade: calculateAge(date) }))}
+              renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
+              maxDate={dayjs()}
+            />
+            <TextField
+              fullWidth
+              label="Idade"
+              value={editingParticipant?.idade || ''}
+              disabled
+              sx={{ mb: 2 }}
+            />
+          </LocalizationProvider>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowEditDialog(false)}>Cancelar</Button>
+          <Button onClick={updateParticipant} variant="contained">Salvar</Button>
         </DialogActions>
       </Dialog>
     </Container>
