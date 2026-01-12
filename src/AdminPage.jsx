@@ -30,6 +30,8 @@ const AdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterByDate, setFilterByDate] = useState(null);
+  const [filterUnderAge, setFilterUnderAge] = useState(false);
+  const [filterAdultAge, setFilterAdultAge] = useState(false);
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
@@ -346,6 +348,16 @@ const AdminPage = () => {
       });
     }
 
+    // Filtrar por menores de 18 anos
+    if (filterUnderAge) {
+      filtered = filtered.filter(p => p.idade < 18);
+    }
+
+    // Filtrar por 18 anos ou mais
+    if (filterAdultAge) {
+      filtered = filtered.filter(p => p.idade >= 18);
+    }
+
     // Ordenar alfabeticamente por nome
     filtered = filtered.sort((a, b) =>
       a.nome.toLowerCase().localeCompare(b.nome.toLowerCase())
@@ -498,6 +510,32 @@ const AdminPage = () => {
             />
           ))}
         </Box>
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <Chip
+          label="Menores de 18 anos"
+          onClick={() => {
+            setFilterUnderAge(!filterUnderAge);
+            setFilterAdultAge(false);
+            setCurrentPage(1);
+          }}
+          color={filterUnderAge ? 'warning' : 'default'}
+          variant={filterUnderAge ? 'filled' : 'outlined'}
+          icon={filterUnderAge ? '⚠️' : undefined}
+          sx={{ mr: 1 }}
+        />
+        <Chip
+          label="18 anos ou mais"
+          onClick={() => {
+            setFilterAdultAge(!filterAdultAge);
+            setFilterUnderAge(false);
+            setCurrentPage(1);
+          }}
+          color={filterAdultAge ? 'success' : 'default'}
+          variant={filterAdultAge ? 'filled' : 'outlined'}
+          icon={filterAdultAge ? '✓' : undefined}
+        />
       </Box>
 
       <TableContainer component={Paper}>
