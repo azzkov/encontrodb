@@ -29,6 +29,7 @@ const AdminPage = () => {
   const [editingParticipant, setEditingParticipant] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterByDate, setFilterByDate] = useState(null);
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
@@ -336,12 +337,32 @@ const AdminPage = () => {
       );
     }
 
+    // Filtrar por data de inscrição
+    if (filterByDate) {
+      filtered = filtered.filter(p => {
+        if (!p.dataInscricao) return false;
+        const participantDate = p.dataInscricao.toLocaleDateString('pt-BR');
+        return participantDate === filterByDate;
+      });
+    }
+
     // Ordenar alfabeticamente por nome
     filtered = filtered.sort((a, b) =>
       a.nome.toLowerCase().localeCompare(b.nome.toLowerCase())
     );
 
     return filtered;
+  };
+
+  const getUniqueDatesWithCount = () => {
+    const dateMap = {};
+    participantes.forEach(p => {
+      const dateStr = p.dataInscricao?.toLocaleDateString('pt-BR');
+      if (dateStr) {
+        dateMap[dateStr] = (dateMap[dateStr] || 0) + 1;
+      }
+    });
+    return Object.entries(dateMap).sort((a, b) => new Date(b[0].split('/').reverse().join('-')) - new Date(a[0].split('/').reverse().join('-')));
   };
 
   const getFilteredPaginatedParticipantes = () => {
@@ -441,12 +462,42 @@ const AdminPage = () => {
           }}
           placeholder="Digite pelo menos 3 letras..."
           variant="outlined"
+          sx={{ mb: 2 }}
         />
         {searchTerm.length > 0 && searchTerm.length < 3 && (
           <Typography variant="caption" sx={{ color: 'orange', mt: 1, display: 'block' }}>
             Digite mais {3 - searchTerm.length} letra(s) para filtrar
           </Typography>
         )}
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Filtrar por data de inscrição:
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Chip
+            label="Todas as datas"
+            onClick={() => {
+              setFilterByDate(null);
+              setCurrentPage(1);
+            }}
+            color={filterByDate === null ? 'primary' : 'default'}
+            variant={filterByDate === null ? 'filled' : 'outlined'}
+          />
+          {getUniqueDatesWithCount().map(([date, count]) => (
+            <Chip
+              key={date}
+              label={`${date} (${count})`}
+              onClick={() => {
+                setFilterByDate(date);
+                setCurrentPage(1);
+              }}
+              color={filterByDate === date ? 'primary' : 'default'}
+              variant={filterByDate === date ? 'filled' : 'outlined'}
+            />
+          ))}
+        </Box>
       </Box>
 
       <TableContainer component={Paper}>
