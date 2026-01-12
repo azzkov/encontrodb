@@ -191,6 +191,9 @@ const AdminPage = () => {
     const pageHeight = doc.internal.pageSize.getHeight();
     let yPosition = 15;
 
+    // Obter dados filtrados
+    const filteredData = getFilteredAndSortedParticipantes();
+
     // Cabeçalho com título e subtítulo
     doc.setFontSize(20);
     doc.setTextColor(0, 149, 158); // Cor do tema
@@ -222,13 +225,27 @@ const AdminPage = () => {
     doc.text(`Data do Relatório: ${new Date().toLocaleDateString('pt-BR')}`, 14, yPosition);
     
     yPosition += 5;
-    doc.text(`Total de Participantes: ${participantes.length}`, 14, yPosition);
+    doc.text(`Total de Participantes (com filtros): ${filteredData.length}`, 14, yPosition);
     
     yPosition += 5;
     doc.text(`Limite de Participantes: ${limite}`, 14, yPosition);
+
+    // Filtros aplicados
+    yPosition += 5;
+    const filterInfo = [];
+    if (searchTerm.length >= 3) filterInfo.push(`Nome: "${searchTerm}"`);
+    if (filterByDate) filterInfo.push(`Data: ${filterByDate}`);
+    if (filterUnderAge) filterInfo.push('Menores de 18 anos');
+    if (filterAdultAge) filterInfo.push('18 anos ou mais');
+    
+    if (filterInfo.length > 0) {
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Filtros aplicados: ${filterInfo.join(' | ')}`, 14, yPosition);
+    }
     
     // Dados da tabela
-    const data = participantes.map((p, index) => [
+    const data = filteredData.map((p, index) => [
       index + 1,
       p.nome,
       p.telefone || 'N/A',
@@ -348,14 +365,20 @@ const AdminPage = () => {
       });
     }
 
-    // Filtrar por menores de 18 anos
-    if (filterUnderAge) {
-      filtered = filtered.filter(p => p.idade < 18);
-    }
-
-    // Filtrar por 18 anos ou mais
-    if (filterAdultAge) {
-      filtered = filtered.filter(p => p.idade >= 18);
+    // Filtrar por menores de 18 anos E/OU 18 anos ou mais
+    if (filterUnderAge || filterAdultAge) {
+      filtered = filtered.filter(p => {
+        if (filterUnderAge && filterAdultAge) {
+          // Se ambos estão marcados, mostrar todos (sem filtro)
+          return true;
+        } else if (filterUnderAge) {
+          // Se apenas menores de 18
+          return p.idade < 18;
+        } else if (filterAdultAge) {
+          // Se apenas 18 ou mais
+          return p.idade >= 18;
+        }
+      });
     }
 
     // Ordenar alfabeticamente por nome
@@ -517,7 +540,6 @@ const AdminPage = () => {
           label="Menores de 18 anos"
           onClick={() => {
             setFilterUnderAge(!filterUnderAge);
-            setFilterAdultAge(false);
             setCurrentPage(1);
           }}
           color={filterUnderAge ? 'warning' : 'default'}
@@ -529,7 +551,6 @@ const AdminPage = () => {
           label="18 anos ou mais"
           onClick={() => {
             setFilterAdultAge(!filterAdultAge);
-            setFilterUnderAge(false);
             setCurrentPage(1);
           }}
           color={filterAdultAge ? 'success' : 'default'}
