@@ -853,7 +853,7 @@ const Footer = () => (
           </Box>
         </Box>
       </Box>
-      <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 1 }}>
         <Typography sx={{ opacity: 0.8 }}>
           &copy; 2026 CESAM Goiânia. Todos os direitos reservados.
         </Typography>
