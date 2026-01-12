@@ -7,7 +7,8 @@ import {
 } from '@mui/material';
 import { 
   Menu as MenuIcon, ExpandMore, Schedule, LocationOn, 
-  Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp, PhotoLibrary
+  Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp, PhotoLibrary,
+  Instagram, Facebook, WhatsApp, YouTube, Twitter
 } from '@mui/icons-material';
 import InscricaoPage from './InscricaoPage';
 import AdminPage from './AdminPage';
@@ -809,7 +810,47 @@ const Footer = () => (
           <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }}>
             Redes Sociais
           </Typography>
-          <Typography sx={{ opacity: 0.9 }}>@cesamgo</Typography>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <IconButton
+              component="a"
+              href="https://www.instagram.com/cesamgo"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                color: 'inherit',
+                opacity: 0.9,
+                '&:hover': {
+                  color: '#FFD700',
+                  opacity: 1,
+                  transform: 'scale(1.2)'
+                },
+                transition: 'all 0.3s ease'
+              }}
+              title="Instagram @cesamgo"
+            >
+              <Instagram />
+            </IconButton>
+            <IconButton
+              component="a"
+              href="https://www.facebook.com/cesamgo"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                color: 'inherit',
+                opacity: 0.9,
+                '&:hover': {
+                  color: '#FFD700',
+                  opacity: 1,
+                  transform: 'scale(1.2)'
+                },
+                transition: 'all 0.3s ease'
+              }}
+              title="Facebook CESAM"
+            >
+              <Facebook />
+            </IconButton>
+          
+          </Box>
         </Box>
       </Box>
       <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
