@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { 
   Box, Container, Typography, Button, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, TextField, Alert,
-  Dialog, DialogTitle, DialogContent, DialogActions, Chip
+  Dialog, DialogTitle, DialogContent, DialogActions, Chip, Pagination
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -25,6 +25,9 @@ const AdminPage = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
     telefone: '',
@@ -170,6 +173,8 @@ const AdminPage = () => {
         dataInscricao: doc.data().dataInscricao?.toDate()
       }));
       setParticipantes(data);
+      setCurrentPage(1);
+      setSearchTerm('');
     } catch (error) {
       setMessage('Erro ao carregar participantes.');
     }
@@ -217,6 +222,46 @@ const AdminPage = () => {
         setMessage('Erro ao remover participante.');
       }
     }
+  };
+
+  const getPaginatedParticipantes = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return participantes.slice(startIndex, endIndex);
+  };
+
+  const getTotalPages = () => {
+    return Math.ceil(participantes.length / itemsPerPage);
+  };
+
+  const getFilteredAndSortedParticipantes = () => {
+    let filtered = participantes;
+
+    // Filtrar por termo de busca (mínimo 3 caracteres)
+    if (searchTerm.length >= 3) {
+      filtered = filtered.filter(p =>
+        p.nome.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Ordenar alfabeticamente por nome
+    filtered = filtered.sort((a, b) =>
+      a.nome.toLowerCase().localeCompare(b.nome.toLowerCase())
+    );
+
+    return filtered;
+  };
+
+  const getFilteredPaginatedParticipantes = () => {
+    const filtered = getFilteredAndSortedParticipantes();
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filtered.slice(startIndex, endIndex);
+  };
+
+  const getFilteredTotalPages = () => {
+    const filtered = getFilteredAndSortedParticipantes();
+    return Math.ceil(filtered.length / itemsPerPage);
   };
 
   if (!user) {
@@ -293,6 +338,25 @@ const AdminPage = () => {
         </Alert>
       )}
 
+      <Box sx={{ mb: 3 }}>
+        <TextField
+          fullWidth
+          label="Pesquisar por nome (mínimo 3 letras)"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder="Digite pelo menos 3 letras..."
+          variant="outlined"
+        />
+        {searchTerm.length > 0 && searchTerm.length < 3 && (
+          <Typography variant="caption" sx={{ color: 'orange', mt: 1, display: 'block' }}>
+            Digite mais {3 - searchTerm.length} letra(s) para filtrar
+          </Typography>
+        )}
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -307,7 +371,7 @@ const AdminPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {participantes.map((participante) => (
+            {getFilteredPaginatedParticipantes().map((participante) => (
               <TableRow key={participante.id}>
                 <TableCell>{participante.nome}</TableCell>
                 <TableCell>{participante.telefone || 'N/A'}</TableCell>
@@ -349,6 +413,15 @@ const AdminPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 3 }}>
+        <Pagination 
+          count={getFilteredTotalPages()}
+          page={currentPage}
+          onChange={(event, value) => setCurrentPage(value)}
+          color="primary"
+        />
+      </Box>
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Adicionar Participante</DialogTitle>
