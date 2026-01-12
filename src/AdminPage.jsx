@@ -13,6 +13,8 @@ import { auth, db } from './firebase';
 import { getSystemConfig, updateSystemConfig } from './configService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const AdminPage = () => {
   const [user, setUser] = useState(null);
@@ -180,26 +182,116 @@ const AdminPage = () => {
     }
   };
 
-  const exportToCSV = () => {
-    const headers = ['Nome', 'Telefone', 'Data_Nascimento', 'Idade', 'Data_Inscricao', 'Status'];
-    const csvContent = [
-      headers.join(','),
-      ...participantes.map(p => [
-        `"${p.nome}"`,
-        `"${p.telefone || 'N/A'}"`,
-        `"${p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A'}"`,
-        p.idade || 'N/A',
-        `"${p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A'}"`,
-        p.status || 'inscrito'
-      ].join(','))
-    ].join('\n');
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 15;
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `participantes_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
+    // Cabeçalho com título e subtítulo
+    doc.setFontSize(20);
+    doc.setTextColor(0, 149, 158); // Cor do tema
+    doc.setFont(undefined, 'bold');
+    doc.text('CESAM Goiânia', pageWidth / 2, yPosition, { align: 'center' });
+    
+    yPosition += 8;
+    doc.setFontSize(14);
+    doc.setTextColor(0, 149, 158);
+    doc.setFont(undefined, 'bold');
+    doc.text('Painel Administrativo', pageWidth / 2, yPosition, { align: 'center' });
+    
+    yPosition += 6;
+    doc.setFontSize(10);
+    doc.setTextColor(102, 102, 102);
+    doc.setFont(undefined, 'normal');
+    doc.text('Gestão de Participantes - Relatório Geral', pageWidth / 2, yPosition, { align: 'center' });
+    
+    // Linha divisória
+    yPosition += 3;
+    doc.setDrawColor(0, 149, 158);
+    doc.setLineWidth(0.5);
+    doc.line(14, yPosition, pageWidth - 14, yPosition);
+    
+    // Informações do relatório
+    yPosition += 6;
+    doc.setFontSize(9);
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Data do Relatório: ${new Date().toLocaleDateString('pt-BR')}`, 14, yPosition);
+    
+    yPosition += 5;
+    doc.text(`Total de Participantes: ${participantes.length}`, 14, yPosition);
+    
+    yPosition += 5;
+    doc.text(`Limite de Participantes: ${limite}`, 14, yPosition);
+    
+    // Dados da tabela
+    const data = participantes.map((p, index) => [
+      index + 1,
+      p.nome,
+      p.telefone || 'N/A',
+      p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A',
+      p.idade || 'N/A',
+      p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A',
+      p.status || 'inscrito'
+    ]);
+
+    autoTable(doc, {
+      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Data Inscrição', 'Status']],
+      body: data,
+      startY: yPosition + 8,
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+        overflow: 'linebreak',
+        font: 'helvetica'
+      },
+      headStyles: {
+        fillColor: [0, 149, 158],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        halign: 'center',
+        lineColor: [0, 149, 158],
+        lineWidth: 0.5
+      },
+      bodyStyles: {
+        textColor: [50, 50, 50],
+        lineColor: [200, 200, 200],
+        lineWidth: 0.3
+      },
+      alternateRowStyles: {
+        fillColor: [245, 250, 250]
+      },
+      columnStyles: {
+        0: { halign: 'center', cellWidth: 10 },
+        4: { halign: 'center' },
+        6: { halign: 'center' }
+      },
+      margin: { top: yPosition + 8, left: 14, right: 14 },
+      didDrawPage: (data) => {
+        const pageSize = doc.internal.pageSize;
+        const pageHeight = pageSize.getHeight();
+        const pageWidth = pageSize.getWidth();
+        
+        // Rodapé
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(
+          `Página ${data.pageNumber}`,
+          pageWidth / 2,
+          pageHeight - 8,
+          { align: 'center' }
+        );
+        
+        doc.text(
+          '© 2026 CESAM Goiânia. Todos os direitos reservados.',
+          pageWidth / 2,
+          pageHeight - 4,
+          { align: 'center' }
+        );
+      }
+    });
+
+    doc.save(`participantes_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const updateLimit = async () => {
@@ -323,8 +415,8 @@ const AdminPage = () => {
           <Button variant="outlined" onClick={() => setShowLimitDialog(true)}>
             Definir Limite
           </Button>
-          <Button variant="contained" onClick={exportToCSV}>
-            Exportar CSV
+          <Button variant="contained" onClick={exportToPDF}>
+            Exportar PDF
           </Button>
           <Button variant="outlined" onClick={handleLogout}>
             Sair
