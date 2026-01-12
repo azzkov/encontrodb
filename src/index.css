@@ -26,21 +26,25 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Mobile viewport fix */
 @media (max-width: 768px) {
   html {
     -webkit-text-size-adjust: 100%;
-  }
-  
-  body {
-    -webkit-overflow-scrolling: touch;
   }
 }

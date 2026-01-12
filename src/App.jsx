@@ -508,11 +508,13 @@ const Organizadores = () => {
       { nome: 'Rosângela Rodrigues', foto: '/fotos/rosangela.jfif', funcoes: ['Diretora Executiva - CESAM Goiânia'] }
     ],
     pastorais: [
+      { nome: 'Jeniffer Nogueira', foto: '/fotos/jeniffer.jfif', funcoes: ['Animadora Pastoral CESAM Goiânia', 'Formação: Pedagogia'] },
+      { nome: 'Karlla Khristine Rodrigues', foto: '/fotos/karlla.jfif', funcoes: ['Analista Socioedutaiva', 'Formação: Economista'] },
       { nome: 'Robert Trajano', foto: '/fotos/robert.jpg', funcoes: ['Coordenador Pastoral da Presença', 'Formação: Administração de Empresas'] },
       { nome: 'Walison da Silva', foto: '/fotos/wallison.jfif', funcoes: ['Animador Pastoral CESAM Goiânia', 'Formação: Teologia e Letras'] }
     ],
     secretarias: [
-      { nome: 'Jeniffer Nogueira', foto: '/fotos/jeniffer.jfif', funcoes: ['Animadora Pastoral CESAM Goiânia', 'Formação: Pedagogia'] },
+      
       { nome: 'Paula Araújo', foto: '/fotos/paula.jfif', funcoes: ['Analista Departamento Pessoal', 'Formação: Pedagogia e Gestão de RH'] }
     ],
     comissao: [
@@ -522,8 +524,7 @@ const Organizadores = () => {
       { nome: 'Edivan Batista de Lima', foto: '/fotos/edivan.jpeg', funcoes: ['Instrutor', 'Formação: Análista de Sistemas e Segurança da Informação'] },
       { nome: 'Isamara Santana', foto: '/fotos/isamara.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Jonatas Peres', foto: '/fotos/jonatas.jfif', funcoes: ['Instrutor', 'Formação: Arquiteto'] },
-      { nome: 'Joyce Azeredo', foto: '/fotos/joyce.jfif', funcoes: ['Auxiliar Administrativo', 'Formação: Pedagogia e Enfermagem'] },
-      { nome: 'Karlla Khristine Rodrigues', foto: '/fotos/karlla.jfif', funcoes: ['Analista Socioedutaiva', 'Formação: Economista'] },
+      { nome: 'Joyce Azeredo', foto: '/fotos/joyce.jfif', funcoes: ['Auxiliar Administrativo', 'Formação: Pedagogia e Enfermagem'] },      
       { nome: 'Mônica Godoi', foto: '/fotos/monica.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Nelimar Herculano', foto: '/fotos/nelimar.jfif', funcoes: ['Analista Departamento Pessoal', 'Formação: Pedagogia e Gestão de RH'] },
       { nome: 'Rodrigo Neres', foto: '/fotos/rodrigo.jfif', funcoes: ['Auxiliar de Manutenção Predial'] },
@@ -663,7 +664,7 @@ const Organizadores = () => {
 
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 3, color: '#FFD700' }}>
-            Secretárias
+            Secretária
           </Typography>
           <Grid container spacing={3} justifyContent="center">
             {organizadores.secretarias.map((pessoa, index) => (
