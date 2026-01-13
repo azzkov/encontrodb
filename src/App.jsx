@@ -714,7 +714,7 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
     },
     {
       titulo: 'Alimentação',
-      conteudo: 'Todas as refeições estão incluídas na inscrição: café da manhã, almoço e lanche da tarde. Informar previamente sobre restrições alimentares ou necessidades especiais.'
+      conteudo: 'Todas as refeições estão incluídas na inscrição: café da manhã, almoço, lanche da tarde e jantar. Informar previamente sobre restrições alimentares ou necessidades especiais.'
     },
     {
       titulo: 'Material Necessário',
