@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { 
   Box, Container, Typography, Button, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, TextField, Alert,
-  Dialog, DialogTitle, DialogContent, DialogActions, Chip, Pagination
+  Dialog, DialogTitle, DialogContent, DialogActions, Chip, Pagination,
+  Checkbox, FormControlLabel
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -32,12 +33,15 @@ const AdminPage = () => {
   const [filterByDate, setFilterByDate] = useState(null);
   const [filterUnderAge, setFilterUnderAge] = useState(false);
   const [filterAdultAge, setFilterAdultAge] = useState(false);
+  const [filterAutorizacaoEntregue, setFilterAutorizacaoEntregue] = useState(false);
+  const [filterAutorizacaoPendente, setFilterAutorizacaoPendente] = useState(false);
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
     telefone: '',
     dataNascimento: null,
-    idade: ''
+    idade: '',
+    autorizacaoEntregue: false
   });
 
   useEffect(() => {
@@ -101,7 +105,8 @@ const AdminPage = () => {
   const editParticipant = (participant) => {
     setEditingParticipant({
       ...participant,
-      dataNascimento: participant.dataNascimento ? dayjs(participant.dataNascimento) : null
+      dataNascimento: participant.dataNascimento ? dayjs(participant.dataNascimento) : null,
+      autorizacaoEntregue: participant.autorizacaoEntregue || false
     });
     setShowEditDialog(true);
   };
@@ -117,7 +122,8 @@ const AdminPage = () => {
         nome: editingParticipant.nome,
         telefone: editingParticipant.telefone || '',
         dataNascimento: editingParticipant.dataNascimento.toDate(),
-        idade: editingParticipant.idade
+        idade: editingParticipant.idade,
+        autorizacaoEntregue: editingParticipant.autorizacaoEntregue
       });
       
       setShowEditDialog(false);
@@ -126,6 +132,18 @@ const AdminPage = () => {
       setMessage('Participante atualizado com sucesso.');
     } catch (error) {
       setMessage('Erro ao atualizar participante.');
+    }
+  };
+
+  const toggleAutorizacao = async (id, newValue) => {
+    try {
+      await updateDoc(doc(db, 'participantes', id), {
+        autorizacaoEntregue: newValue
+      });
+      loadParticipantes();
+      setMessage('Status de autorização atualizado com sucesso.');
+    } catch (error) {
+      setMessage('Erro ao atualizar status de autorização.');
     }
   };
 
@@ -146,11 +164,12 @@ const AdminPage = () => {
         telefone: newParticipant.telefone || '',
         dataNascimento: newParticipant.dataNascimento.toDate(),
         idade: newParticipant.idade,
+        autorizacaoEntregue: newParticipant.autorizacaoEntregue,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
       
-      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '' });
+      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '', autorizacaoEntregue: false });
       setShowAddDialog(false);
       loadParticipantes();
       setMessage('Participante adicionado com sucesso.');
@@ -237,6 +256,8 @@ const AdminPage = () => {
     if (filterByDate) filterInfo.push(`Data: ${filterByDate}`);
     if (filterUnderAge) filterInfo.push('Menores de 18 anos');
     if (filterAdultAge) filterInfo.push('18 anos ou mais');
+    if (filterAutorizacaoEntregue) filterInfo.push('Autorização Entregue');
+    if (filterAutorizacaoPendente) filterInfo.push('Autorização Pendente');
     
     if (filterInfo.length > 0) {
       doc.setFontSize(8);
@@ -251,12 +272,13 @@ const AdminPage = () => {
       p.telefone || 'N/A',
       p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A',
       p.idade || 'N/A',
+      p.autorizacaoEntregue ? 'Sim' : 'Não',
       p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A',
       p.status || 'inscrito'
     ]);
 
     autoTable(doc, {
-      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Data Inscrição', 'Status']],
+      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Autorização', 'Data Inscrição', 'Status']],
       body: data,
       startY: yPosition + 8,
       styles: {
@@ -284,7 +306,8 @@ const AdminPage = () => {
       columnStyles: {
         0: { halign: 'center', cellWidth: 10 },
         4: { halign: 'center' },
-        6: { halign: 'center' }
+        5: { halign: 'center' },
+        7: { halign: 'center' }
       },
       margin: { top: yPosition + 8, left: 14, right: 14 },
       didDrawPage: (data) => {
@@ -377,6 +400,21 @@ const AdminPage = () => {
         } else if (filterAdultAge) {
           // Se apenas 18 ou mais
           return p.idade >= 18;
+        }
+      });
+    }
+
+    // Filtrar por autorização entregue E/OU pendente
+    if (filterAutorizacaoEntregue || filterAutorizacaoPendente) {
+      filtered = filtered.filter(p => {
+        const entregue = p.autorizacaoEntregue === true;
+        if (filterAutorizacaoEntregue && filterAutorizacaoPendente) {
+          // Se ambos estão marcados, mostrar todos (sem filtro)
+          return true;
+        } else if (filterAutorizacaoEntregue) {
+          return entregue;
+        } else if (filterAutorizacaoPendente) {
+          return !entregue;
         }
       });
     }
@@ -536,6 +574,9 @@ const AdminPage = () => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Filtrar por idade:
+        </Typography>
         <Chip
           label="Menores de 18 anos"
           onClick={() => {
@@ -559,6 +600,33 @@ const AdminPage = () => {
         />
       </Box>
 
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Filtrar por autorização:
+        </Typography>
+        <Chip
+          label="Autorização Entregue"
+          onClick={() => {
+            setFilterAutorizacaoEntregue(!filterAutorizacaoEntregue);
+            setCurrentPage(1);
+          }}
+          color={filterAutorizacaoEntregue ? 'success' : 'default'}
+          variant={filterAutorizacaoEntregue ? 'filled' : 'outlined'}
+          icon={filterAutorizacaoEntregue ? '✓' : undefined}
+          sx={{ mr: 1 }}
+        />
+        <Chip
+          label="Autorização Pendente"
+          onClick={() => {
+            setFilterAutorizacaoPendente(!filterAutorizacaoPendente);
+            setCurrentPage(1);
+          }}
+          color={filterAutorizacaoPendente ? 'warning' : 'default'}
+          variant={filterAutorizacaoPendente ? 'filled' : 'outlined'}
+          icon={filterAutorizacaoPendente ? '⚠️' : undefined}
+        />
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -567,6 +635,7 @@ const AdminPage = () => {
               <TableCell>Telefone</TableCell>
               <TableCell>Data Nasc.</TableCell>
               <TableCell>Idade</TableCell>
+              <TableCell>Autorização Entregue</TableCell>
               <TableCell>Data Inscrição</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Ações</TableCell>
@@ -585,6 +654,12 @@ const AdminPage = () => {
                     label={participante.idade} 
                     color={participante.idade <= 18 ? 'warning' : 'default'}
                     size="small"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Checkbox
+                    checked={!!participante.autorizacaoEntregue}
+                    onChange={(e) => toggleAutorizacao(participante.id, e.target.checked)}
                   />
                 </TableCell>
                 <TableCell>
@@ -660,6 +735,15 @@ const AdminPage = () => {
               disabled
               sx={{ mb: 2 }}
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={newParticipant.autorizacaoEntregue}
+                  onChange={(e) => setNewParticipant(prev => ({ ...prev, autorizacaoEntregue: e.target.checked }))}
+                />
+              }
+              label="Autorização Entregue"
+            />
           </LocalizationProvider>
         </DialogContent>
         <DialogActions>
@@ -720,6 +804,15 @@ const AdminPage = () => {
               value={editingParticipant?.idade || ''}
               disabled
               sx={{ mb: 2 }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editingParticipant?.autorizacaoEntregue || false}
+                  onChange={(e) => setEditingParticipant(prev => ({ ...prev, autorizacaoEntregue: e.target.checked }))}
+                />
+              }
+              label="Autorização Entregue"
             />
           </LocalizationProvider>
         </DialogContent>
