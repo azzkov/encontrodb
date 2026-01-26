@@ -572,29 +572,39 @@ const AdminPage = () => {
         <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
           Filtrar por data de inscrição:
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <Chip
-            label="Todas as datas"
-            onClick={() => {
-              setFilterByDate(null);
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+          <DatePicker
+            label="Selecione uma data"
+            value={filterByDate ? dayjs(filterByDate, 'DD/MM/YYYY') : null}
+            onChange={(date) => {
+              if (date) {
+                setFilterByDate(date.format('DD/MM/YYYY'));
+              } else {
+                setFilterByDate(null);
+              }
               setCurrentPage(1);
             }}
-            color={filterByDate === null ? 'primary' : 'default'}
-            variant={filterByDate === null ? 'filled' : 'outlined'}
+            format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                variant: 'outlined',
+                sx: { maxWidth: 250 }
+              }
+            }}
           />
-          {getUniqueDatesWithCount().map(([date, count]) => (
-            <Chip
-              key={date}
-              label={`${date} (${count})`}
+          {filterByDate && (
+            <Button 
+              size="small" 
               onClick={() => {
-                setFilterByDate(date);
+                setFilterByDate(null);
                 setCurrentPage(1);
               }}
-              color={filterByDate === date ? 'primary' : 'default'}
-              variant={filterByDate === date ? 'filled' : 'outlined'}
-            />
-          ))}
-        </Box>
+              sx={{ ml: 1 }}
+            >
+              Limpar
+            </Button>
+          )}
+        </LocalizationProvider>
       </Box>
 
       <Box sx={{ mb: 3 }}>
