@@ -35,6 +35,7 @@ const AdminPage = () => {
   const [filterAdultAge, setFilterAdultAge] = useState(false);
   const [filterAutorizacaoEntregue, setFilterAutorizacaoEntregue] = useState(false);
   const [filterAutorizacaoPendente, setFilterAutorizacaoPendente] = useState(false);
+  const [filterPhoneLast4, setFilterPhoneLast4] = useState('');
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
@@ -258,6 +259,7 @@ const AdminPage = () => {
     if (filterAdultAge) filterInfo.push('18 anos ou mais');
     if (filterAutorizacaoEntregue) filterInfo.push('Autorização Entregue');
     if (filterAutorizacaoPendente) filterInfo.push('Autorização Pendente');
+    if (filterPhoneLast4) filterInfo.push(`Telefone: ...${filterPhoneLast4}`);
     
     if (filterInfo.length > 0) {
       doc.setFontSize(8);
@@ -419,6 +421,15 @@ const AdminPage = () => {
       });
     }
 
+    // Filtrar por últimos 4 dígitos do telefone
+    if (filterPhoneLast4.trim() !== '') {
+      filtered = filtered.filter(p => {
+        if (!p.telefone) return false;
+        const last4Digits = p.telefone.replace(/\D/g, '').slice(-4);
+        return last4Digits === filterPhoneLast4;
+      });
+    }
+
     // Ordenar alfabeticamente por nome
     filtered = filtered.sort((a, b) =>
       a.nome.toLowerCase().localeCompare(b.nome.toLowerCase())
@@ -436,6 +447,19 @@ const AdminPage = () => {
       }
     });
     return Object.entries(dateMap).sort((a, b) => new Date(b[0].split('/').reverse().join('-')) - new Date(a[0].split('/').reverse().join('-')));
+  };
+
+  const getUniqueLast4PhoneDigits = () => {
+    const phonesMap = {};
+    participantes.forEach(p => {
+      if (p.telefone) {
+        const last4 = p.telefone.replace(/\D/g, '').slice(-4);
+        if (last4.length === 4) {
+          phonesMap[last4] = (phonesMap[last4] || 0) + 1;
+        }
+      }
+    });
+    return Object.entries(phonesMap).sort((a, b) => b[1] - a[1]);
   };
 
   const getFilteredPaginatedParticipantes = () => {
@@ -625,6 +649,30 @@ const AdminPage = () => {
           variant={filterAutorizacaoPendente ? 'filled' : 'outlined'}
           icon={filterAutorizacaoPendente ? '⚠️' : undefined}
         />
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Filtrar por últimos 4 dígitos do telefone:
+        </Typography>
+        <TextField
+          label="Digite os 4 últimos dígitos"
+          value={filterPhoneLast4}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+            setFilterPhoneLast4(value);
+            setCurrentPage(1);
+          }}
+          placeholder="Ex: 1234"
+          variant="outlined"
+          inputProps={{ maxLength: 4 }}
+          sx={{ maxWidth: 300 }}
+        />
+        {filterPhoneLast4.length > 0 && filterPhoneLast4.length < 4 && (
+          <Typography variant="caption" sx={{ color: 'orange', mt: 1, display: 'block' }}>
+            Digite mais {4 - filterPhoneLast4.length} dígito(s)
+          </Typography>
+        )}
       </Box>
 
       <TableContainer component={Paper}>
