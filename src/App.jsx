@@ -709,7 +709,7 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
     },
     {
       titulo: 'Hospedagem',
-      conteudo: 'A hospedagem dos participantes será em salas de aula adaptadas para o evento. Trazer colchão, saco de dormir e itens pessoais. Haverá banheiros disponíveis no local.'
+      conteudo: 'A hospedagem dos participantes será em salas de aula adaptadas para o evento. Trazer itens pessoais para higiene e muita fé. Haverá banheiros disponíveis no local.'
     },
     {
       titulo: 'Alimentação',
