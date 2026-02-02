@@ -355,11 +355,10 @@ const Programacao = () => {
       { horario: '22h', evento: 'Recolhimento', detalhes: 'Responsável: Coordenação Geral' }
     ],
     [
-      { horario: '07h', evento: 'Despertar', detalhes: 'Responsável: Sineteiro' },
-      { horario: '08h', evento: 'Oração da Manhã - Bom Dia!', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '8h30', evento: 'Café da manhã', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '09h', evento: '1ª Oficina - Paraliturgia: Exposição do Santíssimo Sacramento e sua liturgia', detalhes: 'Responsável: Convidado' },
-      { horario: '10h20', evento: 'Intervalo e lanchinho', detalhes: 'Responsável: Equipe de Cozinha' },
+      { horario: '07h30', evento: 'Café da Manhã', detalhes: 'Responsável: Sineteiro' },
+      { horario: '08h20', evento: '1ª Oficina: Salesianidade - Dom Bosco e a Missão Evangelizadora ', detalhes: 'Responsável: Equipe de Oração' },
+      { horario: '09h30', evento: 'Santa Missa - Diretor da Presença Salesiana de Goiânia Pe. Wagner Gama', detalhes: 'Responsável: Organizadores' },
+      { horario: '10h30', evento: 'Intervalo e lanchinho', detalhes: 'Responsável: Equipe de Cozinha' },
       { horario: '10h40', evento: '2ª Oficina - Protagonismo Juvenil na Pastoral Salesiana e a JMS no CESAM GOIÂNIA', detalhes: 'Responsável: Robert Trajano' },
       { horario: '11h55', evento: 'Angelus - Oração', detalhes: 'Responsável: Equipe de Oração' },
       { horario: '12h', evento: 'Almoço', detalhes: 'Responsável: Equipe de Cozinha' },
