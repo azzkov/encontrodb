@@ -351,7 +351,7 @@ const Programacao = () => {
       { horario: '19h', evento: 'Chegada e Recepção', detalhes: 'Responsável: Equipe de Animação e Acolhida' },
       { horario: '19h30', evento: 'Jantar', detalhes: 'Responsável: Equipe de Cozinha' },
       { horario: '20h30', evento: 'Acolhida, Orientações e Apresentação da Plenária Eletiva dos Aprendizes Representantes', detalhes: 'Responsável: Coordenação Geral' },
-      { horario: '21h', evento: 'Louvor Noturno', detalhes: 'Responsável: Equipe de Oração' },
+      { horario: '21h', evento: 'Louvor Noturno', detalhes: 'Responsável: Equipe de Oração/ Pe. Agnaldo' },
       { horario: '22h', evento: 'Recolhimento', detalhes: 'Responsável: Coordenação Geral' }
     ],
     [
@@ -366,8 +366,8 @@ const Programacao = () => {
       { horario: '14h50', evento: 'Intervalo, Lanchinho e Pátio', detalhes: 'Responsável: Equipe de Cozinha' },
       { horario: '17h', evento: 'Higiene', detalhes: 'Responsável: Coordenação Geral' },
       { horario: '18h', evento: 'Momento Mariano - Santo Terço', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '19h', evento: 'Festa no céu de Dom Bosco à Fantasia com jantar', detalhes: 'Responsável: Equipe da Festa' },
-      { horario: '21h30', evento: 'Oração Noturna, Higiene pessoal e Recolhimento', detalhes: 'Responsável: Equipe de Oração' }
+      { horario: '19h', evento: 'Festa no céu de Dom Bosco à Fantasia com jantar', detalhes: 'Responsável: Equipe da Festa/ Rei Davi(Paróquia Nossa Senhora de Fátima)' },
+      { horario: '21h30', evento: 'Oração Noturna, Higiene pessoal e Recolhimento', detalhes: 'Responsável: Equipe de Oração/ Anakin' }
     ],
     [
       { horario: '06h', evento: 'Despertar e Higiene Pessoal', detalhes: 'Responsável: Sineteiro' },
