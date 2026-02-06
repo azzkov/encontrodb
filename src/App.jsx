@@ -359,7 +359,7 @@ const Programacao = () => {
       { horario: '08h20', evento: '1ª Oficina: Salesianidade - Dom Bosco e a Missão Evangelizadora ', detalhes: 'Responsável: Rogério do Vale' },
       { horario: '09h30', evento: 'Santa Missa - Diretor da Presença Salesiana de Goiânia Pe. Wagner Gama', detalhes: 'Responsável: Equipe de Oração' },
       { horario: '10h30', evento: 'Intervalo e lanchinho', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '10h40', evento: '2ª Oficina - Paraliturgia - Exposição do Santíssimo Sacramento e sua Liturgia ', detalhes: 'Responsável: Karlla Kristinne' },
+      { horario: '10h40', evento: '2ª Oficina - Paraliturgia - Radical é ser de Deus! ', detalhes: 'Responsável: Karlla Kristinne / Thuan de Oliveira Peres' },
       { horario: '11h55', evento: 'Angelus - Oração', detalhes: 'Responsável: Equipe de Oração' },
       { horario: '12h', evento: 'Almoço', detalhes: 'Responsável: Equipe de Cozinha' },
       { horario: '13h30', evento: '3ª Oficina - Liturgia', detalhes: 'Responsável: Wallison da Silva' },
