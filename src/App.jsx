@@ -524,7 +524,6 @@ const Organizadores = () => {
       { nome: 'Edivan Batista de Lima', foto: '/fotos/edivan.jpeg', funcoes: ['Instrutor', 'Formação: Análista de Sistemas e Segurança da Informação'] },
       { nome: 'Isamara Santana', foto: '/fotos/isamara.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Jonatas Peres', foto: '/fotos/jonatas.jfif', funcoes: ['Instrutor', 'Formação: Arquiteto'] },
-      { nome: 'Joyce Azeredo', foto: '/fotos/joyce.jfif', funcoes: ['Auxiliar Administrativo', 'Formação: Pedagogia e Enfermagem'] },      
       { nome: 'Mônica Godoi', foto: '/fotos/monica.jfif', funcoes: ['Instrutora', 'Formação: Pedagogia'] },
       { nome: 'Nelimar Herculano', foto: '/fotos/nelimar.jfif', funcoes: ['Analista Departamento Pessoal', 'Formação: Pedagogia e Gestão de RH'] },
       { nome: 'Rodrigo Neres', foto: '/fotos/rodrigo.jfif', funcoes: ['Auxiliar de Manutenção Predial'] },
