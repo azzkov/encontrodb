@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { 
-  Box, Container, Typography, TextField, Button, Paper, 
-  Alert, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions
+import {
+  Box, Container, Typography, TextField, Button, Paper,
+  Alert, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions,
+  FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,7 +17,8 @@ const InscricaoPage = ({ onClose }) => {
     nome: '',
     telefone: '',
     dataNascimento: null,
-    idade: ''
+    idade: '',
+    categoria: ''
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -53,7 +55,7 @@ const InscricaoPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.telefone || !formData.dataNascimento) {
+    if (!formData.nome || !formData.telefone || !formData.dataNascimento || !formData.categoria) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -61,14 +63,16 @@ const InscricaoPage = ({ onClose }) => {
     setLoading(true);
     try {
       const { getSystemConfig } = await import('./configService');
-      
+
       // Verificar limite de participantes
       const [participantesQuery, config] = await Promise.all([
         getDocs(query(collection(db, 'participantes'))),
         getSystemConfig()
       ]);
-      
-      if (participantesQuery.size >= config.limiteParticipantes) {
+
+      const validParticipants = participantesQuery.docs.filter(doc => doc.data().status !== 'espera');
+
+      if (validParticipants.length >= config.limiteParticipantes) {
         setMessage('Limite de participantes atingido. Inscrições encerradas.');
         setLoading(false);
         return;
@@ -79,6 +83,7 @@ const InscricaoPage = ({ onClose }) => {
         telefone: formData.telefone,
         dataNascimento: formData.dataNascimento.toDate(),
         idade: formData.idade,
+        categoria: formData.categoria,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
@@ -110,36 +115,36 @@ const InscricaoPage = ({ onClose }) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-      <Box sx={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        bgcolor: 'rgba(0,0,0,0.8)', 
-        display: 'flex', 
-        alignItems: 'center', 
+      <Box sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        bgcolor: 'rgba(0,0,0,0.8)',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
         zIndex: 2000
       }}>
         {showForm && (
           <Container maxWidth="sm">
             <Paper sx={{ p: 4, position: 'relative' }}>
-              <Button 
+              <Button
                 onClick={onClose}
                 sx={{ position: 'absolute', top: 8, right: 8 }}
               >
                 ✕
               </Button>
-              
+
               <Typography variant="h4" textAlign="center" gutterBottom color="#00959E">
-                2º Encontro Pastoral
+                3º Encontro Pastoral
               </Typography>
               <Typography variant="h6" textAlign="center" gutterBottom>
-                Festa de Dom Bosco Lá no Céu!
+                Jovens Servos com Maria
               </Typography>
               <Typography textAlign="center" sx={{ mb: 3 }}>
-                06, 07 e 08 de Fevereiro de 2026
+
               </Typography>
 
               <form onSubmit={handleSubmit}>
@@ -175,8 +180,22 @@ const InscricaoPage = ({ onClose }) => {
                   label="Idade"
                   value={formData.idade}
                   disabled
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 2 }}
                 />
+
+                <FormControl component="fieldset" sx={{ mb: 3, width: '100%' }}>
+                  <FormLabel component="legend" sx={{ color: 'text.primary', mb: 1 }}>Categoria *</FormLabel>
+                  <RadioGroup
+                    row
+                    name="categoria"
+                    value={formData.categoria}
+                    onChange={(e) => setFormData(prev => ({ ...prev, categoria: e.target.value }))}
+                  >
+                    <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
+                    <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
+                    <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+                  </RadioGroup>
+                </FormControl>
 
                 {message && (
                   <Alert severity={message.includes('sucesso') ? 'success' : 'error'} sx={{ mb: 2 }}>
@@ -189,8 +208,8 @@ const InscricaoPage = ({ onClose }) => {
                   fullWidth
                   variant="contained"
                   disabled={loading}
-                  sx={{ 
-                    bgcolor: '#00959E', 
+                  sx={{
+                    bgcolor: '#00959E',
                     '&:hover': { bgcolor: '#007A82' },
                     py: 1.5
                   }}
@@ -202,8 +221,8 @@ const InscricaoPage = ({ onClose }) => {
           </Container>
         )}
 
-        <Dialog 
-          open={showAuthDialog} 
+        <Dialog
+          open={showAuthDialog}
           onClose={() => setShowAuthDialog(false)}
           maxWidth="sm"
           fullWidth
@@ -217,7 +236,7 @@ const InscricaoPage = ({ onClose }) => {
               Autorização Necessária
             </Typography>
             <Typography sx={{ mb: 3, lineHeight: 1.6 }}>
-              Como você é menor de idade, será necessário comparecer ao evento com a autorização 
+              Como você é menor de idade, será necessário comparecer ao evento com a autorização
               dos pais/responsáveis devidamente preenchida e assinada para ter sua entrada liberada.
             </Typography>
             <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
@@ -225,11 +244,11 @@ const InscricaoPage = ({ onClose }) => {
             </Typography>
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 3, gap: 2 }}>
-            <Button 
-              onClick={downloadAuthorization} 
+            <Button
+              onClick={downloadAuthorization}
               variant="contained"
-              sx={{ 
-                bgcolor: '#FFD700', 
+              sx={{
+                bgcolor: '#FFD700',
                 color: '#000',
                 fontWeight: 'bold',
                 px: 4,
@@ -238,7 +257,7 @@ const InscricaoPage = ({ onClose }) => {
             >
               Imprimir Autorização
             </Button>
-            <Button 
+            <Button
               onClick={() => { setShowAuthDialog(false); onClose(); }}
               variant="outlined"
               sx={{ px: 4 }}

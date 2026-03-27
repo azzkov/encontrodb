@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { 
-  AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent, 
+import {
+  AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent,
   Accordion, AccordionSummary, AccordionDetails, Avatar, Chip, Box,
   Tabs, Tab, IconButton, Drawer, List, ListItem, ListItemText,
   createTheme, ThemeProvider, Fab, Zoom, Grow, Slide, Fade
 } from '@mui/material';
-import { 
-  Menu as MenuIcon, ExpandMore, Schedule, LocationOn, 
+import {
+  Menu as MenuIcon, ExpandMore, Schedule, LocationOn,
   Group, Flag, ExpandMore as ExpandMoreIcon, KeyboardArrowUp, PhotoLibrary,
   Instagram, Facebook, WhatsApp, YouTube, Twitter
 } from '@mui/icons-material';
@@ -60,23 +60,23 @@ const Header = () => {
     <AppBar position="fixed" sx={{ bgcolor: '#00959E', zIndex: 1300 }}>
       <Toolbar sx={{ px: { xs: 1, sm: 2 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <img 
-            src="/logo.png" 
-            alt="Logo" 
-            style={{ 
-              height: window.innerWidth < 600 ? 40 : 60, 
-              marginRight: window.innerWidth < 600 ? 8 : 16 
-            }} 
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{
+              height: window.innerWidth < 600 ? 40 : 60,
+              marginRight: window.innerWidth < 600 ? 8 : 16
+            }}
           />
         </Box>
-        
+
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           {tabs.map(tab => (
             <Button
               key={tab.id}
               color="inherit"
               onClick={() => scrollToSection(tab.id)}
-              sx={{ 
+              sx={{
                 mx: 0.5,
                 fontSize: { md: '0.8rem', lg: '0.875rem' },
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
@@ -102,9 +102,9 @@ const Header = () => {
         >
           <List sx={{ width: 250 }}>
             {tabs.map(tab => (
-              <ListItem 
-                key={tab.id} 
-                button 
+              <ListItem
+                key={tab.id}
+                button
                 onClick={() => scrollToSection(tab.id)}
               >
                 <ListItemText primary={tab.label} />
@@ -119,69 +119,63 @@ const Header = () => {
 
 // Início Component
 const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
-  <Box 
-    id="inicio" 
-    sx={{ 
-      minHeight: '100vh', 
-      background: '#00698b',
+  <Box
+    id="inicio"
+    sx={{
+      minHeight: '100vh',
+      background: '#ffffffff',
       display: 'flex',
       alignItems: 'center',
-      pt: { xs: 10, sm: 8 },
-      pb: { xs: 4, sm: 6 },
-      px: { xs: 2, sm: 0 }
+      pt: { xs: 7, sm: 7 }, // Reduced padding specifically to eliminate top empty space
+      pb: { xs: 1, sm: 1 },
+      px: { xs: 2, sm: 0 },
+      boxSizing: 'border-box'
     }}
   >
-    <Container maxWidth="lg" sx={{ textAlign: 'center', color: 'white', py: { xs: 2, sm: 4 } }}>
-         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-        <img 
-          src="/fotos/banner.png" 
-          alt="Banner do Evento" 
-          style={{
-            maxWidth: '40%',
-            height: 'auto',
-            borderRadius: '12px'
+    <Container maxWidth="lg" sx={{ textAlign: 'center', color: '#063455', py: { xs: 1, sm: 1 } }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: { xs: 1, sm: 2 } }}>
+        <Box
+          component="img"
+          src="/fotos/banner.png"
+          alt="Banner do Evento"
+          sx={{
+            maxWidth: { xs: '95%', sm: '70%', md: '60%' }, // Increase maximum width
+            maxHeight: '50vh', // Increase maximum height
+            objectFit: 'contain',
+            borderRadius: '10px'
           }}
         />
       </Box>
-      <Typography 
-        variant="h2" 
-        component="h1" 
-        gutterBottom 
-        sx={{ 
+      <Typography
+        variant="h2"
+        component="h1"
+        sx={{
           fontWeight: 300,
-          fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' }
+          fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.5rem' },
+          mb: 1
         }}
       >
-        2º Encontro Pastoral
+        3º Encontro Pastoral
       </Typography>
-      <Typography 
-        variant="h5" 
-        sx={{ 
-          opacity: 0.9,
-          fontSize: { xs: '1.2rem', sm: '1.5rem' },
-          mb: 2
-        }}
-      >
-        Festa de Dom Bosco Lá no Céu!
-      </Typography>
-      <Typography 
-        variant="h6" 
-        sx={{ 
+
+      <Typography
+        variant="h6"
+        sx={{
           opacity: 0.9,
           fontSize: { xs: '1rem', sm: '1.25rem' },
-          mb: 4
+          mb: { xs: 2, sm: 3 }
         }}
       >
         Seja Muito Bem Vindo!
       </Typography>
-      
- 
-      
+
+
+
       {inscricoesEncerradas && (
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            mb: 3,
+        <Typography
+          variant="body1"
+          sx={{
+            mb: 2,
             color: '#FFD700',
             fontWeight: 'bold',
             fontSize: { xs: '1rem', sm: '1.1rem' }
@@ -190,9 +184,9 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
           Obrigado pelo interesse! As inscrições foram encerradas, mas continue acompanhando nossos próximos eventos.
         </Typography>
       )}
-      
+
       <Grow in={true} timeout={1200}>
-        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+        <Box sx={{ mb: { xs: 1, sm: 2 } }}>
           <Button
             variant="contained"
             size="large"
@@ -210,7 +204,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
               animation: inscricoesEncerradas ? 'none' : 'pulse 2s infinite',
               cursor: inscricoesEncerradas ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              '&:hover': inscricoesEncerradas ? {} : { 
+              '&:hover': inscricoesEncerradas ? {} : {
                 bgcolor: '#E6C200',
                 transform: 'scale(1.05) translateY(-2px)',
                 boxShadow: '0 16px 48px rgba(255, 215, 0, 0.5)'
@@ -237,31 +231,31 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
 const Sobre = () => {
   const cards = [
     { icon: <Flag sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Objetivo Geral', content: 'Promover a integração e formação pastoral da comunidade através de atividades espirituais e educativas.' },
-    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: '06, 07 e 08 de Fevereiro de 2026' },
-    { icon: <LocationOn sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Onde?', content: 'CESAM Goiânia - Alameda dos Buritis, 485, Setor Oeste - Goiânia/GO', hasMap: true },
-    { icon: <Group sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Participantes', content: 'Jovens aprendizes e educadores do CESAM Goiânia' }
+    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: 'Á declarar' },
+    { icon: <LocationOn sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Onde?', content: 'Silvânia - Goiás', hasMap: true },
+    { icon: <Group sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Participantes', content: 'Jovens aprendizes, ex-aprendiz, jovens de moradores da cidade destino e educadores do CESAM Goiânia' }
   ];
 
   return (
-    <Box 
-      id="sobre" 
-      sx={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #45A5BF, #378399)',
+    <Box
+      id="sobre"
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #cececeff, #ffffffff)',
         py: { xs: 4, sm: 8 },
         px: { xs: 2, sm: 0 }
       }}
     >
       <Container maxWidth="lg">
-        <Typography 
-          variant="h3" 
-          component="h2" 
-          textAlign="center" 
-          gutterBottom 
-          sx={{ 
-            mb: 4, 
-            fontWeight: 300, 
-            color: 'white',
+        <Typography
+          variant="h3"
+          component="h2"
+          textAlign="center"
+          gutterBottom
+          sx={{
+            mb: 4,
+            fontWeight: 300,
+            color: '#063455',
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
           }}
         >
@@ -270,10 +264,10 @@ const Sobre = () => {
         <Grid container spacing={{ xs: 3, sm: 4 }} justifyContent="center" alignItems="stretch">
           {cards.map((card, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
-                  textAlign: 'center', 
+              <Card
+                sx={{
+                  height: '100%',
+                  textAlign: 'center',
                   p: { xs: 2, sm: 3 },
                   display: 'flex',
                   flexDirection: 'column',
@@ -284,29 +278,29 @@ const Sobre = () => {
                   }
                 }}
               >
-                <CardContent sx={{ 
-                  p: { xs: 2, sm: 3 }, 
-                  flexGrow: 1, 
-                  display: 'flex', 
+                <CardContent sx={{
+                  p: { xs: 2, sm: 3 },
+                  flexGrow: 1,
+                  display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
                 }}>
                   <Box>
                     <Box sx={{ mb: 3 }}>{card.icon}</Box>
-                    <Typography 
-                      variant="h6" 
-                      component="h3" 
-                      gutterBottom 
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      gutterBottom
                       color="#316B8F"
                       sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' }, fontWeight: 600, mb: 2 }}
                     >
                       {card.title}
                     </Typography>
-                    <Typography 
-                      variant="body2" 
+                    <Typography
+                      variant="body2"
                       color="text.secondary"
-                      sx={{ 
-                        fontSize: { xs: '0.9rem', sm: '0.95rem' }, 
+                      sx={{
+                        fontSize: { xs: '0.9rem', sm: '0.95rem' },
                         lineHeight: 1.6,
                         mb: card.hasMap ? 3 : 0
                       }}
@@ -323,7 +317,7 @@ const Sobre = () => {
                         color: '#316B8F',
                         borderColor: '#316B8F',
                         mt: 'auto',
-                        '&:hover': { 
+                        '&:hover': {
                           bgcolor: 'rgba(49, 107, 143, 0.1)',
                           transform: 'scale(1.05)'
                         }
@@ -383,48 +377,48 @@ const Programacao = () => {
   ];
 
   return (
-    <Box 
-      id="programacao" 
-      sx={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #378399, #206B80)',
+    <Box
+      id="programacao"
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #bd8411, #f8f8f8ff)',
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
-        <Typography 
-          variant="h3" 
-          component="h2" 
-          textAlign="center" 
-          gutterBottom 
-          sx={{ 
-            mb: 4, 
+      <Container maxWidth="lg" sx={{ color: '#ffffffff', px: { xs: 2, sm: 3 } }}>
+        <Typography
+          variant="h3"
+          component="h2"
+          textAlign="center"
+          gutterBottom
+          sx={{
+            mb: 4,
             fontWeight: 300,
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
           }}
         >
           Programação do Evento
         </Typography>
-        
+
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-          <Tabs 
-            value={activeDay} 
+          <Tabs
+            value={activeDay}
             onChange={(e, newValue) => setActiveDay(newValue)}
             variant="scrollable"
             scrollButtons="auto"
-            sx={{ 
-              '& .MuiTab-root': { 
-                color: 'rgba(255,255,255,0.7)',
+            sx={{
+              '& .MuiTab-root': {
+                color: 'rgba(6, 52, 85, 0.7)',
                 fontSize: { xs: '0.9rem', sm: '1rem' },
                 minWidth: { xs: 100, sm: 140 },
                 fontWeight: 500,
                 transition: 'all 0.3s ease'
               },
-              '& .Mui-selected': { 
+              '& .Mui-selected': {
                 color: '#FFD700 !important',
                 transform: 'scale(1.05)'
               },
-              '& .MuiTabs-indicator': { 
+              '& .MuiTabs-indicator': {
                 backgroundColor: '#FFD700',
                 height: 3,
                 borderRadius: 2
@@ -436,15 +430,15 @@ const Programacao = () => {
             <Tab label="08/02" />
           </Tabs>
         </Box>
-        
+
         <Box>
           {programacao[activeDay].map((item, index) => (
-            <Accordion 
+            <Accordion
               key={index}
-              sx={{ 
-                mb: 2, 
+              sx={{
+                mb: 2,
                 bgcolor: 'rgba(255,255,255,0.1)',
-                color: 'white',
+                color: '#063455',
                 borderRadius: 2,
                 '&:before': { display: 'none' },
                 '&:hover': {
@@ -454,23 +448,23 @@ const Programacao = () => {
                 transition: 'all 0.3s ease'
               }}
             >
-              <AccordionSummary 
-                expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon sx={{ color: '#b5c96cff' }} />}
                 sx={{ py: 1.5 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 2 }}>
-                  <Chip 
-                    label={item.horario} 
-                    sx={{ 
-                      bgcolor: '#FFD700', 
-                      color: '#000', 
+                  <Chip
+                    label={item.horario}
+                    sx={{
+                      bgcolor: '#FFD700',
+                      color: '#000',
                       fontWeight: 'bold',
                       fontSize: { xs: '0.75rem', sm: '0.85rem' },
                       minWidth: { xs: 60, sm: 80 }
-                    }} 
+                    }}
                   />
-                  <Typography 
-                    sx={{ 
+                  <Typography
+                    sx={{
                       flexGrow: 1,
                       fontSize: { xs: '0.9rem', sm: '1rem' },
                       fontWeight: 500
@@ -481,8 +475,8 @@ const Programacao = () => {
                 </Box>
               </AccordionSummary>
               <AccordionDetails sx={{ pt: 0 }}>
-                <Typography sx={{ 
-                  color: 'rgba(255,255,255,0.9)',
+                <Typography sx={{
+                  color: 'rgba(6, 52, 85, 0.9)',
                   fontSize: { xs: '0.85rem', sm: '0.95rem' },
                   lineHeight: 1.6,
                   pl: { xs: 0, sm: 2 }
@@ -514,7 +508,7 @@ const Organizadores = () => {
       { nome: 'Walison da Silva', foto: '/fotos/wallison.jfif', funcoes: ['Animador Pastoral CESAM Goiânia', 'Formação: Teologia e Letras'] }
     ],
     secretarias: [
-      
+
       { nome: 'Paula Araújo', foto: '/fotos/paula.jfif', funcoes: ['Analista Departamento Pessoal', 'Formação: Pedagogia e Gestão de RH'] }
     ],
     comissao: [
@@ -535,11 +529,11 @@ const Organizadores = () => {
   const PersonCard = ({ pessoa, index, sectionKey }) => {
     const personKey = `${sectionKey}-${index}`;
     const isSelected = selectedPerson === personKey;
-    
+
     return (
-      <Card 
-        sx={{ 
-          textAlign: 'center', 
+      <Card
+        sx={{
+          textAlign: 'center',
           p: 2,
           bgcolor: 'rgba(255,255,255,0.1)',
           color: 'white',
@@ -548,13 +542,13 @@ const Organizadores = () => {
         }}
       >
         <CardContent>
-          <Avatar 
-            src={pessoa.foto} 
+          <Avatar
+            src={pessoa.foto}
             alt={pessoa.nome}
-            sx={{ 
-              width: { xs: 80, sm: 120 }, 
-              height: { xs: 80, sm: 120 }, 
-              mx: 'auto', 
+            sx={{
+              width: { xs: 80, sm: 120 },
+              height: { xs: 80, sm: 120 },
+              mx: 'auto',
               mb: 2,
               border: '3px solid rgba(255,255,255,0.3)'
             }}
@@ -562,13 +556,13 @@ const Organizadores = () => {
           <Typography variant="h6" gutterBottom>
             {pessoa.nome}
           </Typography>
-          <Button 
-            variant="outlined"
+          <Button
+            variant="contained"
             onClick={() => setSelectedPerson(isSelected ? null : personKey)}
-            sx={{ 
-              color: 'white', 
-              borderColor: 'rgba(255,255,255,0.5)',
-              '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.1)' }
+            sx={{
+              bgcolor: '#e4cc80ff',
+              color: '#063455',
+              '&:hover': { bgcolor: '#fbe3a3' }
             }}
           >
             Ver Funções
@@ -576,13 +570,13 @@ const Organizadores = () => {
           {isSelected && (
             <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
               {pessoa.funcoes.map((funcao, i) => (
-                <Chip 
-                  key={i} 
-                  label={funcao} 
+                <Chip
+                  key={i}
+                  label={funcao}
                   size="small"
                   title={funcao}
-                  sx={{ 
-                    bgcolor: 'rgba(255,255,255,0.2)', 
+                  sx={{
+                    bgcolor: '#063455',
                     color: 'white',
                     maxWidth: '100%',
                     '& .MuiChip-label': {
@@ -601,29 +595,30 @@ const Organizadores = () => {
   };
 
   return (
-    <Box 
-      id="organizadores" 
-      sx={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #206B80, #055166)',
+    <Box
+      id="organizadores"
+      sx={{
+        minHeight: '100vh',
+        background: '#bd8411',
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
-        <Typography 
-          variant="h3" 
-          component="h2" 
-          textAlign="center" 
-          gutterBottom 
-          sx={{ 
-            mb: 4, 
+      <Container maxWidth="lg" sx={{ color: '#ffffffff', px: { xs: 2, sm: 3 } }}>
+        <Typography
+          variant="h3"
+          component="h2"
+          textAlign="center"
+          gutterBottom
+          sx={{
+            mb: 4,
             fontWeight: 300,
-            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+            color: '#ffffffff'
           }}
         >
           Organizadores do Evento
         </Typography>
-        
+
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 3, color: '#FFD700' }}>
             Direção Geral
@@ -721,22 +716,22 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
   ];
 
   return (
-    <Box 
-      id="informacoes" 
-      sx={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #055166, #033D49)',
+    <Box
+      id="informacoes"
+      sx={{
+        minHeight: '100vh',
+        background: ' #fbe3a3',
         py: 8
       }}
     >
-      <Container maxWidth="lg" sx={{ color: 'white', px: { xs: 2, sm: 3 } }}>
-        <Typography 
-          variant="h3" 
-          component="h2" 
-          textAlign="center" 
-          gutterBottom 
-          sx={{ 
-            mb: 4, 
+      <Container maxWidth="lg" sx={{ color: '#063455', px: { xs: 2, sm: 3 } }}>
+        <Typography
+          variant="h3"
+          component="h2"
+          textAlign="center"
+          gutterBottom
+          sx={{
+            mb: 4,
             fontWeight: 300,
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
           }}
@@ -745,20 +740,20 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
         </Typography>
         <Box>
           {informacoes.map((info, index) => (
-            <Accordion 
+            <Accordion
               key={index}
-              sx={{ 
-                mb: 1, 
+              sx={{
+                mb: 1,
                 bgcolor: 'rgba(255,255,255,0.1)',
-                color: 'white',
+                color: '#063455',
                 '&:before': { display: 'none' }
               }}
             >
-              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#063455' }} />}>
                 <Typography variant="h6">{info.titulo}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography sx={{ color: 'rgba(255,255,255,0.9)', mb: info.botao ? 2 : 0 }}>
+                <Typography sx={{ color: 'rgba(6, 52, 85, 0.9)', mb: info.botao ? 2 : 0 }}>
                   {info.conteudo}
                 </Typography>
                 {info.botao && (
@@ -788,24 +783,24 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
 
 // Footer Component
 const Footer = () => (
-  <Box component="footer" sx={{ bgcolor: '#00959E', color: 'white', py: 4 }}>
+  <Box component="footer" sx={{ bgcolor: '#00959E', color: '#063455', py: 4 }}>
     <Container maxWidth="lg" sx={{ textAlign: 'center' }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', gap: 4, mb: 4 }}>
         <Box>
           <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }}>
             Contato
           </Typography>
-          <Typography sx={{ opacity: 0.9 }}>📞(62) 3920-9800</Typography>
+          <Typography sx={{ opacity: 0.9 }} color="#ffffffff">📞(62) 3920-9800</Typography>
         </Box>
         <Box>
-          <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }} color="#ffffffff">
             Endereço
           </Typography>
-          <Typography sx={{ opacity: 0.9, mb: 1 }}>Alameda dos Buritis, 485</Typography>
-          <Typography sx={{ opacity: 0.9 }}>Setor Oeste - Goiânia/GO</Typography>
+          <Typography sx={{ opacity: 0.9, mb: 1 }} color="#ffffffff">Alameda dos Buritis, 485</Typography>
+          <Typography sx={{ opacity: 0.9 }} color="#ffffffff">Setor Oeste - Goiânia/GO</Typography>
         </Box>
         <Box>
-          <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#FFD700' }} color="#ffffffff">
             Redes Sociais
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
@@ -818,7 +813,7 @@ const Footer = () => (
                 color: 'inherit',
                 opacity: 0.9,
                 '&:hover': {
-                  color: '#FFD700',
+                  color: '#ffffffff',
                   opacity: 1,
                   transform: 'scale(1.2)'
                 },
@@ -837,7 +832,7 @@ const Footer = () => (
                 color: 'inherit',
                 opacity: 0.9,
                 '&:hover': {
-                  color: '#FFD700',
+                  color: '#ffffffff',
                   opacity: 1,
                   transform: 'scale(1.2)'
                 },
@@ -847,7 +842,7 @@ const Footer = () => (
             >
               <Facebook />
             </IconButton>
-          
+
           </Box>
         </Box>
       </Box>
@@ -855,13 +850,13 @@ const Footer = () => (
         <Typography sx={{ opacity: 0.8 }}>
           &copy; 2026 CESAM Goiânia. Todos os direitos reservados.
         </Typography>
-        <Typography 
-          component="a" 
-          href="/admin" 
-          sx={{ 
-            opacity: 0.3, 
-            fontSize: '0.7rem', 
-            color: 'inherit', 
+        <Typography
+          component="a"
+          href="/admin"
+          sx={{
+            opacity: 0.3,
+            fontSize: '0.7rem',
+            color: 'inherit',
             textDecoration: 'none',
             '&:hover': { opacity: 0.6 }
           }}
@@ -899,7 +894,7 @@ const ScrollToTop = () => {
           position: 'fixed',
           bottom: { xs: 16, sm: 24 },
           right: { xs: 16, sm: 24 },
-          bgcolor: '#00959E',
+          bgcolor: '#ffffffff',
           '&:hover': { bgcolor: '#007A82' },
           zIndex: 1000
         }}
@@ -927,7 +922,7 @@ const MuralFotos = () => {
         bgcolor: '#FFD700',
         color: '#000',
         fontWeight: 'bold',
-        '&:hover': { 
+        '&:hover': {
           bgcolor: '#E6C200',
           transform: 'scale(1.05)'
         },
@@ -964,9 +959,9 @@ function App() {
         setShowAdmin(true);
       }
     };
-    
+
     checkAdminAccess();
-    
+
     // Escutar mudanças na URL
     window.addEventListener('popstate', checkAdminAccess);
     return () => window.removeEventListener('popstate', checkAdminAccess);
@@ -979,13 +974,15 @@ function App() {
         const { collection, getDocs } = await import('firebase/firestore');
         const { db } = await import('./firebase');
         const { getSystemConfig } = await import('./configService');
-        
+
         const [participantesSnapshot, config] = await Promise.all([
           getDocs(collection(db, 'participantes')),
           getSystemConfig()
         ]);
-        
-        setInscricoesEncerradas(participantesSnapshot.size >= config.limiteParticipantes);
+
+        const validParticipantsCount = participantesSnapshot.docs.filter(doc => doc.data().status !== 'espera').length;
+
+        setInscricoesEncerradas(validParticipantsCount >= config.limiteParticipantes);
       } catch (error) {
         console.log('Erro ao verificar limite');
       }
@@ -1026,7 +1023,7 @@ function App() {
         <Footer />
         <ScrollToTop />
         <MuralFotos />
-        
+
         {showInscricao && (
           <InscricaoPage onClose={() => setShowInscricao(false)} />
         )}

@@ -3,7 +3,8 @@ import {
   Box, Container, Typography, Button, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, TextField, Alert,
   Dialog, DialogTitle, DialogContent, DialogActions, Chip, Pagination,
-  Checkbox, FormControlLabel
+  Checkbox, FormControlLabel, FormControl, FormLabel, RadioGroup, Radio,
+  Tabs, Tab
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -36,12 +37,14 @@ const AdminPage = () => {
   const [filterAutorizacaoEntregue, setFilterAutorizacaoEntregue] = useState(false);
   const [filterAutorizacaoPendente, setFilterAutorizacaoPendente] = useState(false);
   const [filterPhoneLast4, setFilterPhoneLast4] = useState('');
+  const [currentTab, setCurrentTab] = useState(0); // 0 = Confirmados, 1 = Espera
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
     telefone: '',
     dataNascimento: null,
     idade: '',
+    categoria: '',
     autorizacaoEntregue: false
   });
 
@@ -107,6 +110,7 @@ const AdminPage = () => {
     setEditingParticipant({
       ...participant,
       dataNascimento: participant.dataNascimento ? dayjs(participant.dataNascimento) : null,
+      categoria: participant.categoria || '',
       autorizacaoEntregue: participant.autorizacaoEntregue || false
     });
     setShowEditDialog(true);
@@ -124,6 +128,7 @@ const AdminPage = () => {
         telefone: editingParticipant.telefone || '',
         dataNascimento: editingParticipant.dataNascimento.toDate(),
         idade: editingParticipant.idade,
+        categoria: editingParticipant.categoria || '',
         autorizacaoEntregue: editingParticipant.autorizacaoEntregue
       });
       
@@ -165,12 +170,13 @@ const AdminPage = () => {
         telefone: newParticipant.telefone || '',
         dataNascimento: newParticipant.dataNascimento.toDate(),
         idade: newParticipant.idade,
+        categoria: newParticipant.categoria || '',
         autorizacaoEntregue: newParticipant.autorizacaoEntregue,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
       
-      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '', autorizacaoEntregue: false });
+      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '', categoria: '', autorizacaoEntregue: false });
       setShowAddDialog(false);
       loadParticipantes();
       setMessage('Participante adicionado com sucesso.');
@@ -230,7 +236,8 @@ const AdminPage = () => {
     doc.setFontSize(10);
     doc.setTextColor(102, 102, 102);
     doc.setFont(undefined, 'normal');
-    doc.text('Gestão de Participantes - Relatório Geral', pageWidth / 2, yPosition, { align: 'center' });
+    const relatorioTitulo = currentTab === 1 ? 'Gestão de Participantes - Lista de Espera' : 'Gestão de Participantes - Confirmados';
+    doc.text(relatorioTitulo, pageWidth / 2, yPosition, { align: 'center' });
     
     // Linha divisória
     yPosition += 3;
@@ -274,13 +281,14 @@ const AdminPage = () => {
       p.telefone || 'N/A',
       p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A',
       p.idade || 'N/A',
+      p.categoria || 'N/A',
       p.autorizacaoEntregue ? 'Sim' : 'Não',
       p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A',
       p.status || 'inscrito'
     ]);
 
     autoTable(doc, {
-      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Autorização', 'Data Inscrição', 'Status']],
+      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Categoria', 'Autorização', 'Data Inscrição', 'Status']],
       body: data,
       startY: yPosition + 8,
       styles: {
@@ -309,7 +317,8 @@ const AdminPage = () => {
         0: { halign: 'center', cellWidth: 10 },
         4: { halign: 'center' },
         5: { halign: 'center' },
-        7: { halign: 'center' }
+        6: { halign: 'center' },
+        8: { halign: 'center' }
       },
       margin: { top: yPosition + 8, left: 14, right: 14 },
       didDrawPage: (data) => {
@@ -361,6 +370,19 @@ const AdminPage = () => {
     }
   };
 
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'espera' ? 'inscrito' : 'espera';
+      await updateDoc(doc(db, 'participantes', id), {
+        status: newStatus
+      });
+      loadParticipantes();
+      setMessage(`Participante movido para ${newStatus === 'espera' ? 'Lista de Espera' : 'Confirmados'} com sucesso.`);
+    } catch (error) {
+      setMessage('Erro ao mover participante.');
+    }
+  };
+
   const getPaginatedParticipantes = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -373,6 +395,12 @@ const AdminPage = () => {
 
   const getFilteredAndSortedParticipantes = () => {
     let filtered = participantes;
+
+    // Filtrar pela aba atual (Confirmados vs Espera)
+    filtered = filtered.filter(p => {
+      const isEspera = p.status === 'espera';
+      return currentTab === 1 ? isEspera : !isEspera;
+    });
 
     // Filtrar por termo de busca (mínimo 3 caracteres)
     if (searchTerm.length >= 3) {
@@ -524,7 +552,7 @@ const AdminPage = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4">
-          Participantes ({participantes.length}/{limite})
+          Participantes ({participantes.filter(p => p.status !== 'espera').length}/{limite})
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button variant="contained" onClick={() => setShowAddDialog(true)}>
@@ -685,6 +713,13 @@ const AdminPage = () => {
         )}
       </Box>
 
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={currentTab} onChange={(e, val) => { setCurrentTab(val); setCurrentPage(1); }}>
+          <Tab label={`Confirmados (${participantes.filter(p => p.status !== 'espera').length})`} />
+          <Tab label={`Lista de Espera (${participantes.filter(p => p.status === 'espera').length})`} />
+        </Tabs>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -693,6 +728,7 @@ const AdminPage = () => {
               <TableCell>Telefone</TableCell>
               <TableCell>Data Nasc.</TableCell>
               <TableCell>Idade</TableCell>
+              <TableCell>Categoria</TableCell>
               <TableCell>Autorização Entregue</TableCell>
               <TableCell>Data Inscrição</TableCell>
               <TableCell>Status</TableCell>
@@ -714,6 +750,7 @@ const AdminPage = () => {
                     size="small"
                   />
                 </TableCell>
+                <TableCell>{participante.categoria || 'N/A'}</TableCell>
                 <TableCell>
                   <Checkbox
                     checked={!!participante.autorizacaoEntregue}
@@ -724,24 +761,35 @@ const AdminPage = () => {
                   {participante.dataInscricao?.toLocaleDateString('pt-BR')}
                 </TableCell>
                 <TableCell>
-                  <Chip label={participante.status} color="success" size="small" />
+                  <Chip label={participante.status === 'espera' ? 'Espera' : 'Confirmado'} color={participante.status === 'espera' ? 'warning' : 'success'} size="small" />
                 </TableCell>
                 <TableCell>
-                  <Button 
-                    size="small" 
-                    color="primary"
-                    onClick={() => editParticipant(participante)}
-                    sx={{ mr: 1 }}
-                  >
-                    Editar
-                  </Button>
-                  <Button 
-                    size="small" 
-                    color="error"
-                    onClick={() => removeParticipante(participante.id)}
-                  >
-                    Remover
-                  </Button>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    <Button 
+                      size="small" 
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => editParticipant(participante)}
+                    >
+                      Editar
+                    </Button>
+                    <Button 
+                      size="small" 
+                      variant="outlined"
+                      color={participante.status === 'espera' ? 'success' : 'warning'}
+                      onClick={() => toggleStatus(participante.id, participante.status)}
+                    >
+                      {participante.status === 'espera' ? 'Confirmar' : 'Mover p/ Espera'}
+                    </Button>
+                    <Button 
+                      size="small" 
+                      variant="outlined"
+                      color="error"
+                      onClick={() => removeParticipante(participante.id)}
+                    >
+                      Remover
+                    </Button>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
@@ -793,6 +841,19 @@ const AdminPage = () => {
               disabled
               sx={{ mb: 2 }}
             />
+            <FormControl component="fieldset" fullWidth sx={{ mt: 1, mb: 2 }}>
+              <FormLabel component="legend">Categoria</FormLabel>
+              <RadioGroup
+                row
+                name="categoria"
+                value={newParticipant.categoria}
+                onChange={(e) => setNewParticipant(prev => ({ ...prev, categoria: e.target.value }))}
+              >
+                <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
+                <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
+                <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+              </RadioGroup>
+            </FormControl>
             <FormControlLabel
               control={
                 <Checkbox
@@ -863,6 +924,19 @@ const AdminPage = () => {
               disabled
               sx={{ mb: 2 }}
             />
+            <FormControl component="fieldset" fullWidth sx={{ mt: 1, mb: 2 }}>
+              <FormLabel component="legend">Categoria</FormLabel>
+              <RadioGroup
+                row
+                name="categoria"
+                value={editingParticipant?.categoria || ''}
+                onChange={(e) => setEditingParticipant(prev => ({ ...prev, categoria: e.target.value }))}
+              >
+                <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
+                <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
+                <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+              </RadioGroup>
+            </FormControl>
             <FormControlLabel
               control={
                 <Checkbox
