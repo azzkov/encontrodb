@@ -75,7 +75,7 @@ const InscricaoPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.cpf || !formData.telefone || !formData.dataNascimento || !formData.categoria || !formData.numeroResponsavel) {
+    if (!formData.nome || !formData.cpf || !formData.telefone || !formData.dataNascimento || !formData.categoria || !formData.numeroResponsavel || formData.idade === '') {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -110,7 +110,11 @@ const InscricaoPage = ({ onClose }) => {
         status: 'inscrito'
       });
 
-      if (formData.idade < 18) {
+      setLoading(false);
+
+      // Verificar se é menor de idade para solicitar autorização
+      const idade = Number(formData.idade);
+      if (idade <= 18) {
         setShowForm(false);
         setShowAuthDialog(true);
       } else {
@@ -119,8 +123,8 @@ const InscricaoPage = ({ onClose }) => {
       }
     } catch (error) {
       setMessage('Erro ao realizar inscrição. Tente novamente.');
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const downloadAuthorization = () => {
