@@ -353,7 +353,7 @@ const Programacao = () => {
       { horario: '6h30', evento: 'Despertar', detalhes: 'Início do segundo dia' },
       { horario: '7h', evento: 'Santa Missa', detalhes: 'Celebração Eucarística' },
       { horario: '8h', evento: 'Café da manhã', detalhes: 'Primeira refeição do dia' },
-      { horario: '8h30', evento: 'Palestra - Ir. Salesiana', detalhes: 'Formação com Irmã Salesiana' },
+      { horario: '8h30', evento: 'Palestra', detalhes: 'Formação Pastoral' },
       { horario: '9h30', evento: 'Intervalo - Lanchinho', detalhes: 'Pausa para lanche' },
       { horario: '9h40', evento: 'Gincanas', detalhes: 'Atividades recreativas e de integração' },
       { horario: '11h50', evento: 'Angelus', detalhes: 'Oração do Angelus' },
