@@ -954,6 +954,7 @@ const AdminPage = () => {
                 <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
                 <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
                 <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+                <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
               </RadioGroup>
             </FormControl>
             <FormControlLabel
@@ -1055,6 +1056,7 @@ const AdminPage = () => {
                 <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
                 <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
                 <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+                <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
               </RadioGroup>
             </FormControl>
             <FormControlLabel
