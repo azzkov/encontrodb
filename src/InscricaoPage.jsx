@@ -20,7 +20,8 @@ const InscricaoPage = ({ onClose }) => {
     dataNascimento: null,
     idade: '',
     categoria: '',
-    numeroResponsavel: ''
+    numeroResponsavel: '',
+    horarioSaida: ''
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -75,7 +76,7 @@ const InscricaoPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.cpf || !formData.telefone || !formData.dataNascimento || !formData.categoria || !formData.numeroResponsavel || formData.idade === '') {
+    if (!formData.nome || !formData.cpf || !formData.telefone || !formData.dataNascimento || !formData.categoria || !formData.numeroResponsavel || !formData.horarioSaida || formData.idade === '') {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -106,6 +107,7 @@ const InscricaoPage = ({ onClose }) => {
         idade: formData.idade,
         categoria: formData.categoria,
         numeroResponsavel: formData.numeroResponsavel,
+        horarioSaida: formData.horarioSaida,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
@@ -151,11 +153,13 @@ const InscricaoPage = ({ onClose }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 2000
+        zIndex: 2000,
+        overflow: 'auto',
+        py: 2
       }}>
         {showForm && (
-          <Container maxWidth="sm">
-            <Paper sx={{ p: 4, position: 'relative' }}>
+          <Container maxWidth="sm" sx={{ my: 2 }}>
+            <Paper sx={{ p: { xs: 2, sm: 4 }, position: 'relative', maxHeight: '90vh', overflow: 'auto' }}>
               <Button
                 onClick={onClose}
                 sx={{ position: 'absolute', top: 8, right: 8 }}
@@ -231,6 +235,20 @@ const InscricaoPage = ({ onClose }) => {
                     <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
                     <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
                     <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
+                  </RadioGroup>
+                </FormControl>
+
+                <FormControl component="fieldset" sx={{ mb: 3, width: '100%' }}>
+                  <FormLabel component="legend" sx={{ color: 'text.primary', mb: 1 }}>Selecione o seu horário de saída do trabalho *</FormLabel>
+                  <RadioGroup
+                    row
+                    name="horarioSaida"
+                    value={formData.horarioSaida}
+                    onChange={(e) => setFormData(prev => ({ ...prev, horarioSaida: e.target.value }))}
+                  >
+                    <FormControlLabel value="16:00" control={<Radio />} label="16:00" />
+                    <FormControlLabel value="17:00" control={<Radio />} label="17:00" />
+                    <FormControlLabel value="18:00" control={<Radio />} label="18:00" />
                   </RadioGroup>
                 </FormControl>
 

@@ -47,6 +47,7 @@ const AdminPage = () => {
     idade: '',
     categoria: '',
     numeroResponsavel: '',
+    horarioSaida: '',
     autorizacaoEntregue: false
   });
 
@@ -159,6 +160,7 @@ const AdminPage = () => {
         idade: editingParticipant.idade,
         categoria: editingParticipant.categoria || '',
         numeroResponsavel: editingParticipant.numeroResponsavel,
+        horarioSaida: editingParticipant.horarioSaida || '',
         autorizacaoEntregue: editingParticipant.autorizacaoEntregue
       });
       
@@ -184,7 +186,7 @@ const AdminPage = () => {
   };
 
   const addParticipant = async () => {
-    if (!newParticipant.nome || !newParticipant.cpf || !newParticipant.dataNascimento || !newParticipant.numeroResponsavel) {
+    if (!newParticipant.nome || !newParticipant.cpf || !newParticipant.dataNascimento || !newParticipant.numeroResponsavel || !newParticipant.horarioSaida) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -203,12 +205,13 @@ const AdminPage = () => {
         idade: newParticipant.idade,
         categoria: newParticipant.categoria || '',
         numeroResponsavel: newParticipant.numeroResponsavel,
+        horarioSaida: newParticipant.horarioSaida,
         autorizacaoEntregue: newParticipant.autorizacaoEntregue,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
       
-      setNewParticipant({ nome: '', cpf: '', telefone: '', dataNascimento: null, idade: '', categoria: '', numeroResponsavel: '', autorizacaoEntregue: false });
+      setNewParticipant({ nome: '', cpf: '', telefone: '', dataNascimento: null, idade: '', categoria: '', numeroResponsavel: '', horarioSaida: '', autorizacaoEntregue: false });
       setShowAddDialog(false);
       loadParticipantes();
       setMessage('Participante adicionado com sucesso.');
@@ -316,13 +319,14 @@ const AdminPage = () => {
       p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A',
       p.idade || 'N/A',
       p.categoria || 'N/A',
+      p.horarioSaida || 'N/A',
       p.autorizacaoEntregue ? 'Sim' : 'Não',
       p.dataInscricao?.toLocaleDateString('pt-BR') || 'N/A',
       p.status || 'inscrito'
     ]);
 
     autoTable(doc, {
-      head: [['#', 'Nome', 'CPF', 'Telefone', 'Nº Responsável', 'Data Nasc.', 'Idade', 'Categoria', 'Autorização', 'Data Inscrição', 'Status']],
+      head: [['#', 'Nome', 'CPF', 'Telefone', 'Nº Responsável', 'Data Nasc.', 'Idade', 'Categoria', 'Horário Saída', 'Autorização', 'Data Inscrição', 'Status']],
       body: data,
       startY: yPosition + 8,
       styles: {
@@ -811,6 +815,7 @@ const AdminPage = () => {
               <TableCell sx={{ fontWeight: 'bold' }}>Data Nasc.</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Idade</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Categoria</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Horário Saída</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Autorização Entregue</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Data Inscrição</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
@@ -835,6 +840,7 @@ const AdminPage = () => {
                   />
                 </TableCell>
                 <TableCell>{participante.categoria || 'N/A'}</TableCell>
+                <TableCell>{participante.horarioSaida || 'N/A'}</TableCell>
                 <TableCell>
                   <Checkbox
                     checked={!!participante.autorizacaoEntregue}
@@ -957,6 +963,19 @@ const AdminPage = () => {
                 <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
               </RadioGroup>
             </FormControl>
+            <FormControl component="fieldset" fullWidth sx={{ mt: 1, mb: 2 }}>
+              <FormLabel component="legend">Horário de Saída do Trabalho *</FormLabel>
+              <RadioGroup
+                row
+                name="horarioSaida"
+                value={newParticipant.horarioSaida}
+                onChange={(e) => setNewParticipant(prev => ({ ...prev, horarioSaida: e.target.value }))}
+              >
+                <FormControlLabel value="16:00" control={<Radio />} label="16:00" />
+                <FormControlLabel value="17:00" control={<Radio />} label="17:00" />
+                <FormControlLabel value="18:00" control={<Radio />} label="18:00" />
+              </RadioGroup>
+            </FormControl>
             <FormControlLabel
               control={
                 <Checkbox
@@ -1057,6 +1076,19 @@ const AdminPage = () => {
                 <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
                 <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
                 <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
+              </RadioGroup>
+            </FormControl>
+            <FormControl component="fieldset" fullWidth sx={{ mt: 1, mb: 2 }}>
+              <FormLabel component="legend">Horário de Saída do Trabalho</FormLabel>
+              <RadioGroup
+                row
+                name="horarioSaida"
+                value={editingParticipant?.horarioSaida || ''}
+                onChange={(e) => setEditingParticipant(prev => ({ ...prev, horarioSaida: e.target.value }))}
+              >
+                <FormControlLabel value="16:00" control={<Radio />} label="16:00" />
+                <FormControlLabel value="17:00" control={<Radio />} label="17:00" />
+                <FormControlLabel value="18:00" control={<Radio />} label="18:00" />
               </RadioGroup>
             </FormControl>
             <FormControlLabel
