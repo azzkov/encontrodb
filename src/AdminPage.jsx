@@ -589,19 +589,39 @@ const AdminPage = () => {
           Participantes ({participantes.filter(p => p.status !== 'espera').length}/{limite})
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button variant="outlined" onClick={() => { setCurrentPage(1); loadParticipantes(); }}>
+          <Button 
+            variant="contained" 
+            onClick={() => { setCurrentPage(1); loadParticipantes(); }}
+            sx={{ bgcolor: '#2196F3', '&:hover': { bgcolor: '#1976D2' } }}
+          >
             🔄 Atualizar
           </Button>
-          <Button variant="contained" onClick={() => setShowAddDialog(true)}>
+          <Button 
+            variant="contained" 
+            onClick={() => setShowAddDialog(true)}
+            sx={{ bgcolor: '#9C27B0', '&:hover': { bgcolor: '#7B1FA2' } }}
+          >
             Adicionar Participante
           </Button>
-          <Button variant="outlined" onClick={() => setShowLimitDialog(true)}>
+          <Button 
+            variant="contained" 
+            onClick={() => setShowLimitDialog(true)}
+            sx={{ bgcolor: '#FF9800', '&:hover': { bgcolor: '#F57C00' } }}
+          >
             Definir Limite
           </Button>
-          <Button variant="contained" onClick={exportToPDF}>
+          <Button 
+            variant="contained" 
+            onClick={exportToPDF}
+            sx={{ bgcolor: '#4CAF50', '&:hover': { bgcolor: '#388E3C' } }}
+          >
             Exportar PDF
           </Button>
-          <Button variant="outlined" onClick={handleLogout}>
+          <Button 
+            variant="contained" 
+            onClick={handleLogout}
+            sx={{ bgcolor: '#F44336', '&:hover': { bgcolor: '#D32F2F' } }}
+          >
             Sair
           </Button>
         </Box>
