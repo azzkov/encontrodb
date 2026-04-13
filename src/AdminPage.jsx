@@ -41,10 +41,12 @@ const AdminPage = () => {
   const itemsPerPage = 10;
   const [newParticipant, setNewParticipant] = useState({
     nome: '',
+    cpf: '',
     telefone: '',
     dataNascimento: null,
     idade: '',
     categoria: '',
+    numeroResponsavel: '',
     autorizacaoEntregue: false
   });
 
@@ -82,12 +84,38 @@ const AdminPage = () => {
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   };
 
+  const formatCPF = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+    if (numbers.length <= 9) return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`;
+  };
+
+  const handleCPFChange = (e, isEdit = false) => {
+    const formatted = formatCPF(e.target.value);
+    if (isEdit) {
+      setEditingParticipant(prev => ({ ...prev, cpf: formatted }));
+    } else {
+      setNewParticipant(prev => ({ ...prev, cpf: formatted }));
+    }
+  };
+
   const handlePhoneChange = (e, isEdit = false) => {
     const formatted = formatPhone(e.target.value);
     if (isEdit) {
       setEditingParticipant(prev => ({ ...prev, telefone: formatted }));
     } else {
       setNewParticipant(prev => ({ ...prev, telefone: formatted }));
+    }
+  };
+
+  const handleResponsavelChange = (e, isEdit = false) => {
+    const formatted = formatPhone(e.target.value);
+    if (isEdit) {
+      setEditingParticipant(prev => ({ ...prev, numeroResponsavel: formatted }));
+    } else {
+      setNewParticipant(prev => ({ ...prev, numeroResponsavel: formatted }));
     }
   };
 
@@ -117,7 +145,7 @@ const AdminPage = () => {
   };
 
   const updateParticipant = async () => {
-    if (!editingParticipant.nome || !editingParticipant.dataNascimento) {
+    if (!editingParticipant.nome || !editingParticipant.cpf || !editingParticipant.dataNascimento) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -125,10 +153,12 @@ const AdminPage = () => {
     try {
       await updateDoc(doc(db, 'participantes', editingParticipant.id), {
         nome: editingParticipant.nome,
+        cpf: editingParticipant.cpf,
         telefone: editingParticipant.telefone || '',
         dataNascimento: editingParticipant.dataNascimento.toDate(),
         idade: editingParticipant.idade,
         categoria: editingParticipant.categoria || '',
+        numeroResponsavel: editingParticipant.numeroResponsavel,
         autorizacaoEntregue: editingParticipant.autorizacaoEntregue
       });
       
@@ -154,7 +184,7 @@ const AdminPage = () => {
   };
 
   const addParticipant = async () => {
-    if (!newParticipant.nome || !newParticipant.dataNascimento) {
+    if (!newParticipant.nome || !newParticipant.cpf || !newParticipant.dataNascimento || !newParticipant.numeroResponsavel) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -167,16 +197,18 @@ const AdminPage = () => {
     try {
       await addDoc(collection(db, 'participantes'), {
         nome: newParticipant.nome,
+        cpf: newParticipant.cpf,
         telefone: newParticipant.telefone || '',
         dataNascimento: newParticipant.dataNascimento.toDate(),
         idade: newParticipant.idade,
         categoria: newParticipant.categoria || '',
+        numeroResponsavel: newParticipant.numeroResponsavel,
         autorizacaoEntregue: newParticipant.autorizacaoEntregue,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
       
-      setNewParticipant({ nome: '', telefone: '', dataNascimento: null, idade: '', categoria: '', autorizacaoEntregue: false });
+      setNewParticipant({ nome: '', cpf: '', telefone: '', dataNascimento: null, idade: '', categoria: '', numeroResponsavel: '', autorizacaoEntregue: false });
       setShowAddDialog(false);
       loadParticipantes();
       setMessage('Participante adicionado com sucesso.');
@@ -212,7 +244,7 @@ const AdminPage = () => {
   };
 
   const exportToPDF = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF('l');
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     let yPosition = 15;
@@ -278,7 +310,9 @@ const AdminPage = () => {
     const data = filteredData.map((p, index) => [
       index + 1,
       p.nome,
+      p.cpf || 'N/A',
       p.telefone || 'N/A',
+      p.numeroResponsavel || 'N/A',
       p.dataNascimento?.toLocaleDateString('pt-BR') || 'N/A',
       p.idade || 'N/A',
       p.categoria || 'N/A',
@@ -288,13 +322,13 @@ const AdminPage = () => {
     ]);
 
     autoTable(doc, {
-      head: [['#', 'Nome', 'Telefone', 'Data Nasc.', 'Idade', 'Categoria', 'Autorização', 'Data Inscrição', 'Status']],
+      head: [['#', 'Nome', 'CPF', 'Telefone', 'Nº Responsável', 'Data Nasc.', 'Idade', 'Categoria', 'Autorização', 'Data Inscrição', 'Status']],
       body: data,
       startY: yPosition + 8,
       styles: {
-        fontSize: 9,
-        cellPadding: 3,
-        overflow: 'linebreak',
+        fontSize: 8,
+        cellPadding: 2,
+        overflow: 'visible',
         font: 'helvetica'
       },
       headStyles: {
@@ -314,13 +348,13 @@ const AdminPage = () => {
         fillColor: [245, 250, 250]
       },
       columnStyles: {
-        0: { halign: 'center', cellWidth: 10 },
+        0: { halign: 'center', cellWidth: 8 },
         4: { halign: 'center' },
         5: { halign: 'center' },
         6: { halign: 'center' },
         8: { halign: 'center' }
       },
-      margin: { top: yPosition + 8, left: 14, right: 14 },
+      margin: { top: yPosition + 8, left: 10, right: 10 },
       didDrawPage: (data) => {
         const pageSize = doc.internal.pageSize;
         const pageHeight = pageSize.getHeight();
@@ -555,6 +589,9 @@ const AdminPage = () => {
           Participantes ({participantes.filter(p => p.status !== 'espera').length}/{limite})
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button variant="outlined" onClick={() => { setCurrentPage(1); loadParticipantes(); }}>
+            🔄 Atualizar
+          </Button>
           <Button variant="contained" onClick={() => setShowAddDialog(true)}>
             Adicionar Participante
           </Button>
@@ -596,101 +633,123 @@ const AdminPage = () => {
         )}
       </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr', lg: '1fr 1fr 1fr' }, 
+        gap: 3, 
+        mb: 4,
+        backgroundColor: '#f9f9f9',
+        p: 3,
+        borderRadius: 2,
+        border: '1px solid #e0e0e0'
+      }}>
+        {/* Filtro por Data */}
+        <Box>
+          <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 'bold', color: '#333' }}>
           Filtrar por data de inscrição:
-        </Typography>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-          <DatePicker
-            label="Selecione uma data"
-            value={filterByDate ? dayjs(filterByDate, 'DD/MM/YYYY') : null}
-            onChange={(date) => {
-              if (date) {
-                setFilterByDate(date.format('DD/MM/YYYY'));
-              } else {
-                setFilterByDate(null);
-              }
-              setCurrentPage(1);
-            }}
-            format="DD/MM/YYYY"
-            slotProps={{
-              textField: {
-                variant: 'outlined',
-                sx: { maxWidth: 250 }
-              }
-            }}
-          />
-          {filterByDate && (
-            <Button 
-              size="small" 
-              onClick={() => {
-                setFilterByDate(null);
+          </Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+            <DatePicker
+              label="Selecione uma data"
+              value={filterByDate ? dayjs(filterByDate, 'DD/MM/YYYY') : null}
+              onChange={(date) => {
+                if (date) {
+                  setFilterByDate(date.format('DD/MM/YYYY'));
+                } else {
+                  setFilterByDate(null);
+                }
                 setCurrentPage(1);
               }}
-              sx={{ ml: 1 }}
-            >
-              Limpar
-            </Button>
-          )}
-        </LocalizationProvider>
-      </Box>
+              format="DD/MM/YYYY"
+              slotProps={{
+                textField: {
+                  variant: 'outlined',
+                  size: 'small',
+                  fullWidth: true
+                }
+              }}
+            />
+            {filterByDate && (
+              <Button 
+                size="small" 
+                onClick={() => {
+                  setFilterByDate(null);
+                  setCurrentPage(1);
+                }}
+                sx={{ mt: 1, display: 'block' }}
+              >
+                Limpar
+              </Button>
+            )}
+          </LocalizationProvider>
+        </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+        {/* Filtro por Idade */}
+        <Box>
+          <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 'bold', color: '#333' }}>
           Filtrar por idade:
-        </Typography>
-        <Chip
-          label="Menores de 18 anos"
-          onClick={() => {
-            setFilterUnderAge(!filterUnderAge);
-            setCurrentPage(1);
-          }}
-          color={filterUnderAge ? 'warning' : 'default'}
-          variant={filterUnderAge ? 'filled' : 'outlined'}
-          icon={filterUnderAge ? '⚠️' : undefined}
-          sx={{ mr: 1 }}
-        />
-        <Chip
-          label="18 anos ou mais"
-          onClick={() => {
-            setFilterAdultAge(!filterAdultAge);
-            setCurrentPage(1);
-          }}
-          color={filterAdultAge ? 'success' : 'default'}
-          variant={filterAdultAge ? 'filled' : 'outlined'}
-          icon={filterAdultAge ? '✓' : undefined}
-        />
-      </Box>
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            <Chip
+              label="Menores de 18"
+              onClick={() => {
+                setFilterUnderAge(!filterUnderAge);
+                setCurrentPage(1);
+              }}
+              color={filterUnderAge ? 'warning' : 'default'}
+              variant={filterUnderAge ? 'filled' : 'outlined'}
+              icon={filterUnderAge ? '⚠️' : undefined}
+              size="small"
+            />
+            <Chip
+              label="18 anos ou mais"
+              onClick={() => {
+                setFilterAdultAge(!filterAdultAge);
+                setCurrentPage(1);
+              }}
+              color={filterAdultAge ? 'success' : 'default'}
+              variant={filterAdultAge ? 'filled' : 'outlined'}
+              icon={filterAdultAge ? '✓' : undefined}
+              size="small"
+            />
+          </Box>
+        </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+        {/* Filtro por Autorização */}
+        <Box>
+          <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 'bold', color: '#333' }}>
           Filtrar por autorização:
-        </Typography>
-        <Chip
-          label="Autorização Entregue"
-          onClick={() => {
-            setFilterAutorizacaoEntregue(!filterAutorizacaoEntregue);
-            setCurrentPage(1);
-          }}
-          color={filterAutorizacaoEntregue ? 'success' : 'default'}
-          variant={filterAutorizacaoEntregue ? 'filled' : 'outlined'}
-          icon={filterAutorizacaoEntregue ? '✓' : undefined}
-          sx={{ mr: 1 }}
-        />
-        <Chip
-          label="Autorização Pendente"
-          onClick={() => {
-            setFilterAutorizacaoPendente(!filterAutorizacaoPendente);
-            setCurrentPage(1);
-          }}
-          color={filterAutorizacaoPendente ? 'warning' : 'default'}
-          variant={filterAutorizacaoPendente ? 'filled' : 'outlined'}
-          icon={filterAutorizacaoPendente ? '⚠️' : undefined}
-        />
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            <Chip
+              label="Entregue"
+              onClick={() => {
+                setFilterAutorizacaoEntregue(!filterAutorizacaoEntregue);
+                setCurrentPage(1);
+              }}
+              color={filterAutorizacaoEntregue ? 'success' : 'default'}
+              variant={filterAutorizacaoEntregue ? 'filled' : 'outlined'}
+              icon={filterAutorizacaoEntregue ? '✓' : undefined}
+              size="small"
+            />
+            <Chip
+              label="Pendente"
+              onClick={() => {
+                setFilterAutorizacaoPendente(!filterAutorizacaoPendente);
+                setCurrentPage(1);
+              }}
+              color={filterAutorizacaoPendente ? 'warning' : 'default'}
+              variant={filterAutorizacaoPendente ? 'filled' : 'outlined'}
+              icon={filterAutorizacaoPendente ? '⚠️' : undefined}
+              size="small"
+            />
+          </Box>
+        </Box>
       </Box>
 
+      {/* Filtro por Telefone */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold', fontSize: 14, color: '#333' }}>
           Filtrar por últimos 4 dígitos do telefone:
         </Typography>
         <TextField
@@ -703,6 +762,7 @@ const AdminPage = () => {
           }}
           placeholder="Ex: 1234"
           variant="outlined"
+          size="small"
           inputProps={{ maxLength: 4 }}
           sx={{ maxWidth: 300 }}
         />
@@ -723,23 +783,27 @@ const AdminPage = () => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell>Telefone</TableCell>
-              <TableCell>Data Nasc.</TableCell>
-              <TableCell>Idade</TableCell>
-              <TableCell>Categoria</TableCell>
-              <TableCell>Autorização Entregue</TableCell>
-              <TableCell>Data Inscrição</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Ações</TableCell>
+            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>CPF</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Telefone</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Nº Responsável</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Data Nasc.</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Idade</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Categoria</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Autorização Entregue</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Data Inscrição</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {getFilteredPaginatedParticipantes().map((participante) => (
-              <TableRow key={participante.id}>
+              <TableRow key={participante.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
                 <TableCell>{participante.nome}</TableCell>
+                <TableCell>{participante.cpf || 'N/A'}</TableCell>
                 <TableCell>{participante.telefone || 'N/A'}</TableCell>
+                <TableCell>{participante.numeroResponsavel || 'N/A'}</TableCell>
                 <TableCell>
                   {participante.dataNascimento?.toLocaleDateString('pt-BR')}
                 </TableCell>
@@ -819,9 +883,27 @@ const AdminPage = () => {
             />
             <TextField
               fullWidth
+              label="CPF *"
+              value={newParticipant.cpf}
+              onChange={(e) => handleCPFChange(e, false)}
+              placeholder="000.000.000-00"
+              inputProps={{ maxLength: 14 }}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
               label="Telefone"
               value={newParticipant.telefone}
               onChange={(e) => handlePhoneChange(e, false)}
+              placeholder="(62) 99999-9999"
+              inputProps={{ maxLength: 15 }}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Número do Responsável *"
+              value={newParticipant.numeroResponsavel}
+              onChange={(e) => handleResponsavelChange(e, false)}
               placeholder="(62) 99999-9999"
               inputProps={{ maxLength: 15 }}
               sx={{ mb: 2 }}
@@ -902,9 +984,27 @@ const AdminPage = () => {
             />
             <TextField
               fullWidth
+              label="CPF *"
+              value={editingParticipant?.cpf || ''}
+              onChange={(e) => handleCPFChange(e, true)}
+              placeholder="000.000.000-00"
+              inputProps={{ maxLength: 14 }}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
               label="Telefone"
               value={editingParticipant?.telefone || ''}
               onChange={(e) => handlePhoneChange(e, true)}
+              placeholder="(62) 99999-9999"
+              inputProps={{ maxLength: 15 }}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Número do Responsável"
+              value={editingParticipant?.numeroResponsavel || ''}
+              onChange={(e) => handleResponsavelChange(e, true)}
               placeholder="(62) 99999-9999"
               inputProps={{ maxLength: 15 }}
               sx={{ mb: 2 }}

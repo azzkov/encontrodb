@@ -15,10 +15,12 @@ import 'dayjs/locale/pt-br';
 const InscricaoPage = ({ onClose }) => {
   const [formData, setFormData] = useState({
     nome: '',
+    cpf: '',
     telefone: '',
     dataNascimento: null,
     idade: '',
-    categoria: ''
+    categoria: '',
+    numeroResponsavel: ''
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -33,9 +35,27 @@ const InscricaoPage = ({ onClose }) => {
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   };
 
+  const formatCPF = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+    if (numbers.length <= 9) return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`;
+  };
+
+  const handleCPFChange = (e) => {
+    const formatted = formatCPF(e.target.value);
+    setFormData(prev => ({ ...prev, cpf: formatted }));
+  };
+
   const handlePhoneChange = (e) => {
     const formatted = formatPhone(e.target.value);
     setFormData(prev => ({ ...prev, telefone: formatted }));
+  };
+
+  const handleResponsavelChange = (e) => {
+    const formatted = formatPhone(e.target.value);
+    setFormData(prev => ({ ...prev, numeroResponsavel: formatted }));
   };
 
   const calculateAge = (birthDate) => {
@@ -55,7 +75,7 @@ const InscricaoPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.telefone || !formData.dataNascimento || !formData.categoria) {
+    if (!formData.nome || !formData.cpf || !formData.telefone || !formData.dataNascimento || !formData.categoria || !formData.numeroResponsavel) {
       setMessage('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -80,10 +100,12 @@ const InscricaoPage = ({ onClose }) => {
 
       await addDoc(collection(db, 'participantes'), {
         nome: formData.nome,
+        cpf: formData.cpf,
         telefone: formData.telefone,
         dataNascimento: formData.dataNascimento.toDate(),
         idade: formData.idade,
         categoria: formData.categoria,
+        numeroResponsavel: formData.numeroResponsavel,
         dataInscricao: new Date(),
         status: 'inscrito'
       });
@@ -158,6 +180,16 @@ const InscricaoPage = ({ onClose }) => {
 
                 <TextField
                   fullWidth
+                  label="CPF *"
+                  value={formData.cpf}
+                  onChange={handleCPFChange}
+                  placeholder="000.000.000-00"
+                  inputProps={{ maxLength: 14 }}
+                  sx={{ mb: 2 }}
+                />
+
+                <TextField
+                  fullWidth
                   label="Telefone *"
                   value={formData.telefone}
                   onChange={handlePhoneChange}
@@ -194,8 +226,19 @@ const InscricaoPage = ({ onClose }) => {
                     <FormControlLabel value="Aprendiz" control={<Radio />} label="Aprendiz" />
                     <FormControlLabel value="Ex-Aprendiz" control={<Radio />} label="Ex-Aprendiz" />
                     <FormControlLabel value="Jovem de Silvânia" control={<Radio />} label="Jovem de Silvânia" />
+                    <FormControlLabel value="JMS" control={<Radio />} label="JMS" />
                   </RadioGroup>
                 </FormControl>
+
+                <TextField
+                  fullWidth
+                  label="Número do Responsável *"
+                  value={formData.numeroResponsavel}
+                  onChange={handleResponsavelChange}
+                  placeholder="(62) 99999-9999"
+                  inputProps={{ maxLength: 15 }}
+                  sx={{ mb: 2 }}
+                />
 
                 {message && (
                   <Alert severity={message.includes('sucesso') ? 'success' : 'error'} sx={{ mb: 2 }}>
