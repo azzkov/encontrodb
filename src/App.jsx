@@ -231,7 +231,7 @@ const Inicio = ({ onOpenInscricao, inscricoesEncerradas }) => (
 const Sobre = () => {
   const cards = [
     { icon: <Flag sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Objetivo Geral', content: 'Promover a integração e formação pastoral da comunidade através de atividades espirituais e educativas.' },
-    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: 'Á declarar' },
+    { icon: <Schedule sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Quando?', content: '15 a 17 de Maio de 2026' },
     { icon: <LocationOn sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Onde?', content: 'Silvânia - Goiás', hasMap: true },
     { icon: <Group sx={{ fontSize: { xs: 36, sm: 48 }, color: '#316B8F' }} />, title: 'Participantes', content: 'Jovens aprendizes, ex-aprendiz, jovens de moradores da cidade destino e educadores do CESAM Goiânia' }
   ];
@@ -241,7 +241,7 @@ const Sobre = () => {
       id="sobre"
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #cececeff, #ffffffff)',
+        background: 'linear-gradient(135deg, #bd8411, #f8f8f8ff)',
         py: { xs: 4, sm: 8 },
         px: { xs: 2, sm: 0 }
       }}
@@ -255,7 +255,7 @@ const Sobre = () => {
           sx={{
             mb: 4,
             fontWeight: 300,
-            color: '#063455',
+            color: '#ffffffff',
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
           }}
         >
@@ -312,7 +312,7 @@ const Sobre = () => {
                     <Button
                       variant="outlined"
                       size="small"
-                      onClick={() => window.open('https://maps.google.com/?q=Alameda+dos+Buritis,+485,+Setor+Oeste,+Goiânia,+GO', '_blank')}
+                      onClick={() => window.open('https://maps.app.goo.gl/DXkrMnSoMtKgxXgU8', '_blank')}
                       sx={{
                         color: '#316B8F',
                         borderColor: '#316B8F',
@@ -342,37 +342,40 @@ const Programacao = () => {
 
   const programacao = [
     [
-      { horario: '19h', evento: 'Chegada e Recepção', detalhes: 'Responsável: Equipe de Animação e Acolhida' },
-      { horario: '19h30', evento: 'Jantar', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '20h30', evento: 'Acolhida, Orientações e Apresentação da Plenária Eletiva dos Aprendizes Representantes', detalhes: 'Responsável: Coordenação Geral' },
-      { horario: '21h', evento: 'Louvor Noturno', detalhes: 'Responsável: Equipe de Oração/ Pe. Agnaldo' },
-      { horario: '22h', evento: 'Recolhimento', detalhes: 'Responsável: Coordenação Geral' }
+      { horario: '17h', evento: 'Partida do CESAM para Silvânia-Go', detalhes: 'Saída da sede do CESAM' },
+      { horario: '19h', evento: 'Recepção e acolhida dos encontristas', detalhes: 'Chegada em Silvânia-Go' },
+      { horario: '19h30', evento: 'Jantar', detalhes: 'Primeira refeição no local' },
+      { horario: '20h30', evento: 'Animação e Comunicados', detalhes: 'Apresentação e orientações iniciais' },
+      { horario: '21h', evento: 'Oração Noturna', detalhes: 'Momento de oração e reflexão' },
+      { horario: '22h', evento: 'Recolhimento e higiene pessoal', detalhes: 'Preparação para descanso' }
     ],
     [
-      { horario: '07h30', evento: 'Café da Manhã', detalhes: 'Responsável: Sineteiro' },
-      { horario: '08h20', evento: '1ª Oficina: Salesianidade - Dom Bosco e a Missão Evangelizadora ', detalhes: 'Responsável: Rogério do Vale' },
-      { horario: '09h30', evento: 'Santa Missa - Diretor da Presença Salesiana de Goiânia Pe. Wagner Gama', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '10h30', evento: 'Intervalo e lanchinho', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '10h40', evento: '2ª Oficina - Paraliturgia - Radical é ser de Deus! ', detalhes: 'Responsável: Karlla Kristinne / Thuan de Oliveira Peres' },
-      { horario: '11h55', evento: 'Angelus - Oração', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '12h', evento: 'Almoço', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '13h30', evento: '3ª Oficina - Liturgia', detalhes: 'Responsável: Wallison da Silva' },
-      { horario: '14h50', evento: 'Intervalo, Lanchinho e Pátio', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '17h', evento: 'Higiene', detalhes: 'Responsável: Coordenação Geral' },
-      { horario: '18h', evento: 'Momento Mariano - Santo Terço', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '19h', evento: 'Festa no céu de Dom Bosco à Fantasia com jantar', detalhes: 'Responsável: Equipe da Festa/ Rei Davi(Paróquia Nossa Senhora de Fátima)' },
-      { horario: '21h30', evento: 'Oração Noturna, Higiene pessoal e Recolhimento', detalhes: 'Responsável: Equipe de Oração/ Anakin' }
+      { horario: '6h30', evento: 'Despertar', detalhes: 'Início do segundo dia' },
+      { horario: '7h', evento: 'Santa Missa', detalhes: 'Celebração Eucarística' },
+      { horario: '8h', evento: 'Café da manhã', detalhes: 'Primeira refeição do dia' },
+      { horario: '8h30', evento: 'Palestra - Ir. Salesiana', detalhes: 'Formação com Irmã Salesiana' },
+      { horario: '9h30', evento: 'Intervalo - Lanchinho', detalhes: 'Pausa para lanche' },
+      { horario: '9h40', evento: 'Gincanas', detalhes: 'Atividades recreativas e de integração' },
+      { horario: '11h50', evento: 'Angelus', detalhes: 'Oração do Angelus' },
+      { horario: '12h', evento: 'Almoço', detalhes: 'Refeição principal' },
+      { horario: '13h', evento: 'Banho de piscina', detalhes: 'Momento de lazer e descontração' },
+      { horario: '16h', evento: 'Retorno para higiene pessoal', detalhes: 'Preparação para atividades da tarde' },
+      { horario: '17h', evento: 'Santo Terço em procissão', detalhes: 'Momento Mariano' },
+      { horario: '18h', evento: 'Jantar e cinema', detalhes: 'Refeição seguida de sessão de cinema' },
+      { horario: '20h', evento: 'Gincana do cinema', detalhes: 'Atividade relacionada ao filme' },
+      { horario: '21h', evento: 'Oração Noturna', detalhes: 'Momento de oração e reflexão' },
+      { horario: '22h', evento: 'Recolhimento e silêncio', detalhes: 'Preparação para descanso' }
     ],
     [
-      { horario: '06h', evento: 'Despertar e Higiene Pessoal', detalhes: 'Responsável: Sineteiro' },
-      { horario: '07h', evento: 'Santa Missa na Paróquia Dom Bosco', detalhes: 'Responsável: Liturgia paroquial' },
-      { horario: '08h30', evento: 'Café da manhã', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '09h', evento: '4ª Oficina – Protagonismo Juvenil na Pastoral Salesiana e a JMS no CESAM GOIÂNIA', detalhes: 'Responsável: Robert Trajano' },
-      { horario: '10h', evento: 'Plenária Eletiva', detalhes: 'Responsável: Wallison e Jeniffer' },
-      { horario: '10h30', evento: 'Nomeações dos Aprendizes Agentes de Pastoral e Entrega dos emblemas', detalhes: 'Responsável: Rosângela e Rogério, Wallison e Jeniffer' },
-      { horario: '11h55', evento: 'Angelus – Oração', detalhes: 'Responsável: Equipe de Oração' },
-      { horario: '12h', evento: 'Almoço', detalhes: 'Responsável: Equipe de Cozinha' },
-      { horario: '13h00', evento: 'Despedida, Avisos e Encerramento', detalhes: 'Responsável: Coordenação Geral' }
+      { horario: '6h30', evento: 'Despertar', detalhes: 'Início do último dia' },
+      { horario: '7h30', evento: 'Saída – Missa na cidade', detalhes: 'Deslocamento para a cidade' },
+      { horario: '8h', evento: 'Santa Missa', detalhes: 'Celebração Eucarística na cidade' },
+      { horario: '9h', evento: 'Café da manhã', detalhes: 'Refeição matinal' },
+      { horario: '9h30', evento: 'Saída para missão e evangelização e visita à cidade', detalhes: 'Atividade missionária' },
+      { horario: '11h30', evento: 'Retorno para a chácara', detalhes: 'Volta ao local do encontro' },
+      { horario: '12h', evento: 'Almoço e premiação das gincanas', detalhes: 'Refeição e entrega de prêmios' },
+      { horario: '13h', evento: 'Organização do ambiente e dos pertences pessoais', detalhes: 'Preparação para partida' },
+      { horario: '14h', evento: 'Encerramento e Partida', detalhes: 'Despedida e retorno' }
     ]
   ];
 
@@ -425,9 +428,9 @@ const Programacao = () => {
               }
             }}
           >
-            <Tab label="06/02" />
-            <Tab label="07/02" />
-            <Tab label="08/02" />
+            <Tab label="15/05" />
+            <Tab label="16/05" />
+            <Tab label="17/05" />
           </Tabs>
         </Box>
 
@@ -733,7 +736,8 @@ const Informacoes = ({ onOpenInscricao, inscricoesEncerradas }) => {
           sx={{
             mb: 4,
             fontWeight: 300,
-            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+            color: '#ffffffff'
           }}
         >
           Informações
